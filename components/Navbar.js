@@ -4,8 +4,8 @@ import Image from 'next/image'
 
 const Navbar = () => {
   return (
-    <header className='bg-slate-800 text-white'>
-      <nav className='flex px-14 justify-between items-center p-6'>
+  <header className='bg-[#071021] text-white'>
+      <nav className='flex px-10 justify-between items-center p-4'>
         <div className='flex justify-center items-center gap-5'>
           <div className='img'><Image src='/fav.png' height='50' width='50' alt='Inbox Pilot Logo'></Image></div>
           <div className='logo font-bold text-3xl'>Inbox Pilot</div>
