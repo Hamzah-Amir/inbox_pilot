@@ -1,10 +1,13 @@
 'use client'
-
 import Sidebar from '@/components/Sidebar'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { createCampaign } from '@/actions/useractions'
+import { useSession } from 'next-auth/react'
 
-const createCampaign = () => {
+const createCampaignPage = () => {
+
+    const {data: session, status}  = useSession()
 
     const {
         register,
@@ -14,8 +17,9 @@ const createCampaign = () => {
 
     } = useForm();
 
-    const onSubmit = (data) => {
-        console.log(data.campaignTitle)
+    const onSubmit = async (data) => {
+        await createCampaign(session.user.id, data)
+        alert("Campaign Created Successfully!")
     }
 
     return (
@@ -75,9 +79,9 @@ const createCampaign = () => {
                                 id='status'
                                 {...register("status", { required: true })}
                             >
-                                <option value="active">Active</option>
-                                <option value="paused">Paused</option>
-                                <option value="completed">Completed</option>
+                                <option value="ACTIVE">ACTIVE</option>
+                                <option value="PAUSED">PAUSED</option>
+                                <option value="COMPLETED">COMPLETED</option>
                             </select>
                             {errors.status && <p className="text-sm text-red-500 mt-1">Status is required!</p>}
                         </div>
@@ -93,4 +97,4 @@ const createCampaign = () => {
     )
 }
 
-export default createCampaign
+export default createCampaignPage
