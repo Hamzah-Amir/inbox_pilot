@@ -1,3 +1,4 @@
+'use server'
 import { prisma } from "@/lib/prisma";
 
 export async function getCampaign(id) {
@@ -7,9 +8,23 @@ export async function getCampaign(id) {
         },
 
         include: {
-            email: {
+            emails: {
                 include: { replies: true }
             }
+        }
+    })
+    return campaign
+}
+
+export async function createCampaign(id, data) {
+    const campaign = await prisma.campaign.create({
+        data: {
+            userId: id,
+            title: data.campaignTitle,
+            goal: data.goal,
+            status: data.status,
+            startDate: new Date(data.startDate),
+            endDate: data.endDate ? new Date(data.endDate) : null,
         }
     })
     return campaign
