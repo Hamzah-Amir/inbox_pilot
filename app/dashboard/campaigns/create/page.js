@@ -15,7 +15,7 @@ const createCampaign = () => {
     } = useForm();
 
     const onSubmit = (data) => {
-        console.log(data);
+        console.log(data.campaignTitle)
     }
 
     return (
@@ -28,7 +28,7 @@ const createCampaign = () => {
                         <p className='text-gray-300 text-[16px] mt-1'> Set up your campaign details before generating personalized emails.</p>
                     </div>
                 </section>
-                <section className='my-6 w-[45vw] h-[70vh] mx-[17vw] '>
+                <section className='my-6 w-[45vw] h-[80vh] mx-[17vw] '>
                     <form onSubmit={handleSubmit(onSubmit)}
                         className='border flex flex-col  border-[#030b1b] size-full p-6 rounded-[14px] shadow-[#030b1b] shadow-2xl bg-[#0B1624]'>
                         <h1 className='text-2xl font-bold'>Campaign Details</h1>
@@ -68,6 +68,18 @@ const createCampaign = () => {
                                     {...register("endDate", { required: false })}
                                 />
                             </div>
+                        </div>
+                        <div className='mb-4'>
+                            <label htmlFor='status' className=' block mb-2'>Goal <span className='text-red-500'>*</span></label>
+                            <select className='border w-full rounded-lg p-2 h-11 placeholder:text-[#8b99ad] focus:border-[#22D3EE] outline-none'
+                                id='status'
+                                {...register("status", { required: true })}
+                            >
+                                <option value="active">Active</option>
+                                <option value="paused">Paused</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                            {errors.status && <p className="text-sm text-red-500 mt-1">Status is required!</p>}
                         </div>
                         <button className=" border mt-6 border-cyan-600 cursor-pointer rounded-lg p-2 px-6 font-bold bg-cyan-500"
                             type='submit'
