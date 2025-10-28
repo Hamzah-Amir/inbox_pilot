@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <>
-      <main>
+      <main className="bg-linear-to-t  from-[#071021] via-[#0a0f1c] to-[#32265e]">
         <section className="hero p-10">
           <div className="mx-[5vw] mt-5 border-2 bg-linear-to-l from-[#4408c7]  via-[#4e399c]  to-[#68389e] border-purple-700 w-44 h-12 flex items-center rounded-4xl">
             <p className="mx-auto font-thin text-sm ">Powered by GPT-4</p>
