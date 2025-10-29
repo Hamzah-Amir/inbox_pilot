@@ -1,6 +1,7 @@
 'use client'
 import CampaignTable from '@/components/CampaignTable'
 import Sidebar from '@/components/Sidebar'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import React from 'react'
 
@@ -43,6 +44,11 @@ const page = () => {
           <div className=' '>
             <h1 className='text-3xl font-bold mt-8'>Your campaigns</h1>
             <span className='text-[16px] text-gray-400'>Manage and track your AI-powered email campaigns</span>
+            <Link href='/dashboard/generate'>
+              <button className='bg-blue-600 bottom-16 left-56 relative hover:bg-blue-700 text-white px-4 py-2 rounded-md float-right mt-8 mr-4'>
+                Generate New Email
+              </button>
+            </Link>
           </div>
           <div className='border-[0.5px] border-gray-500 my-6 h-full w-[80vw] rounded-2xl'>
             <CampaignTable campaigns={campaign} />
@@ -52,13 +58,16 @@ const page = () => {
           <div className='border rounded-2xl p-6 w-full h-full bg-gray-900 border-gray-800'>
             <h1 className='text-3xl font-bold'> AI Insights</h1>
             <div className='flex items-center justify-center'>
-            <h1 className='text-5xl text-center mt-[25vh] '> Coming Soon...</h1>
+              <h1 className='text-5xl text-center mt-[25vh] '> Coming Soon...</h1>
             </div>
           </div>
           <div className='border rounded-2xl p-6 w-full h-full bg-gray-900 border-gray-800'>
             <h1 className='text-3xl font-bold'>
               Recent Activity
             </h1>
+            <div className='flex items-center justify-center'>
+              <h1 className='text-5xl text-center mt-[25vh] '> Coming Soon...</h1>
+            </div>
           </div>
         </section>
       </main>
