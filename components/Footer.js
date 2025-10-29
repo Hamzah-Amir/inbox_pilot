@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 const Footer = () => {
   return (
-    <footer className="bg-[#071021] text-gray-300 py-8 mt-12">
+    <footer className="bg-[#071021] mx-[17.5vw] text-gray-300 py-8 mt-12">
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="font-bold text-2xl">Inbox Pilot</div>
