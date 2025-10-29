@@ -9,7 +9,7 @@ const Navbar = () => {
   const { data: session } = useSession();
 
 
-  if (!session) {
+  // if (!session) {
 
 
     return (
@@ -38,12 +38,12 @@ const Navbar = () => {
         </nav>
       </header>
     )
-  }
-  if(session && session.user) {
-    return (
-      <div> Logged In Navbar</div>
-    )
-  }
+  // }
+  // if(session && session.user) {
+  //   return (
+  //     <div> Logged In Navbar</div>
+  //   )
+  // }
 
 }
 
