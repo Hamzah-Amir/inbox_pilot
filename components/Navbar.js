@@ -6,6 +6,12 @@ import { useSession } from 'next-auth/react'
 
 const Navbar = () => {
 
+  const { data: session } = useSession();
+
+
+  if (!session) {
+
+
     return (
       <header className='bg-[#071021] border-b border-gray-700 text-white'>
         <nav className='flex px-10 justify-between items-center p-4'>
@@ -32,7 +38,13 @@ const Navbar = () => {
         </nav>
       </header>
     )
-  
+  }
+  if(session && session.user) {
+    return (
+      <div> Logged In Navbar</div>
+    )
+  }
+
 }
 
 export default Navbar
