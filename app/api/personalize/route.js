@@ -3,43 +3,51 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function POST(req) {
-    const session = await getServerSession(authOptions)
-    const body = await req.json()
+  const session = await getServerSession(authOptions)
+  const body = await req.json()
+  console.log(body)
 
-    prompt = `You are InboxPilot — an AI expert in writing short, personalized cold email intros that sound human and spark replies.
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user.email
+    }
+  })
 
-Your job: generate *2 personalized cold email openers* (each 2--3 sentences max) based on the prospect’s data below.
+  const prompt = `You are InboxPilot — an AI expert in writing short, highly personalized cold emails that sound human and get replies.
 
-Focus on:
-- 100% personalization (make it about *them*, not the sender)
-- Natural tone (no “AI” vibe, no fake enthusiasm)
-- Mention something relevant from their background, company, or work
-- Keep it casual, warm, and conversational
-- End each with a soft transition into a pitch (not a hard sell)
+Your job: generate *2 complete cold emails* (each 80-120 words max) based on the prospect's data below.
+
+Each email should include:
+- A personalized intro (based on their company, role, or product)
+- A natural, value-driven middle (show understanding of their context)
+- A subtle pitch for the sender's product
+- A polite call-to-action (like a question or soft close)
+
+Tone: ${body.tone}
 
 Input Data:
-- Name: ${body.name}
-- Role: ${body.role}
-- Company: ${body.company}
-- LinkedIn Bio: ${body.bio}
-- Tone: ${body.tone}
-- Product Description: ${body.product}
-- Value Proposition: ${body.value}
+- Sender Email: ${user.email}
+- Recipient Name: ${body.recipentName}
+- Recipient Email: ${body.recipentEmail}
+- Company: ${body.companyName}
+- Product Description: ${body.productDescription}
 
 Output Format (JSON):
 {
-  "openers": [
-    "First opener here...",
-    "Second opener here..."
+  "emails": [
+    "Full first email here...",
+    "Full second email here..."
   ]
 }
 `
-    const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY })
-    const llm = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt
-    })
 
-    const response = llm.text
-    return new Response(JSON.stringify({ success: true, recieved: response }))
+  const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY })
+  const llm = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: prompt
+  })
+
+  const response = llm.text
+  console.log("Response from Google Gemini LLM:", response)
+  return new Response(JSON.stringify({ success: true, recieved: response }))
 }
