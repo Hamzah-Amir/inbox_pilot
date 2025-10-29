@@ -1,6 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function POST(req) {
+    const session = await getServerSession(authOptions)
     const body = await req.json()
 
     prompt = `You are InboxPilot — an AI expert in writing short, personalized cold email intros that sound human and spark replies.
