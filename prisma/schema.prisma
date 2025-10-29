@@ -29,6 +29,8 @@ model Email {
     campaignId String
     recipentEmail String
     recipentName String?
+    CompanyName String
+    Tone String
     output String @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
