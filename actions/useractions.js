@@ -29,3 +29,13 @@ export async function createCampaign(id, data) {
     })
     return campaign
 }
+
+export async function fetchEmailById(emailId) {
+    const email = await prisma.email.findUnique({
+        where: {
+            id: emailId
+        }
+    })
+
+    return email
+}
