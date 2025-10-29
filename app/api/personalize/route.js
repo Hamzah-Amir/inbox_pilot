@@ -13,11 +13,9 @@ export async function POST(req) {
     }
   })
 
-  let emailsGenerated = user.emailsGenerated
-
   const prompt = `You are InboxPilot — an AI expert in writing short, highly personalized cold emails that sound human and get replies.
 
-Your job: generate *1 complete cold email* (80-120 words max) based on the prospect's data below.
+Your job: generate *1 complete cold email* (100 to 130 words max) based on the prospect's data below.
 
 Each email should include:
 - A personalized intro (based on their company, role, or product)
@@ -25,10 +23,14 @@ Each email should include:
 - A subtle pitch for the sender's product
 - A polite call-to-action (like a question or soft close)
 
+**Important:** Write the email body in clear, well-formatted paragraphs, with line breaks between each section for readability.
+
+
 Tone: ${body.tone}
 
 Input Data:
 - Sender Email: ${user.email}
+- Sender Name: ${user.name}
 - Recipient Name: ${body.recipentName}
 - Recipient Email: ${body.recipentEmail}
 - Company: ${body.companyName}
