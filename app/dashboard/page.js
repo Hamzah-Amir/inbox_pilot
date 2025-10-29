@@ -7,10 +7,6 @@ import React from 'react'
 const page = () => {
 
   const [campaign, setCampaign] = useState([])
-  useEffect(() => {
-    fetchCampaignData()
-  }, [])
-
 
   const fetchCampaignData = async () => {
     const campaignData = await fetch("/api/dashboard/campaigns", {
@@ -23,16 +19,21 @@ const page = () => {
     let res = await campaignData.json()
     console.log(res)
     let content = res.map(c => {
+      const id = c.id;
       const title = c.title;
       const emailsSent = c.emailSent;
       const replies = c.replies
       const conversionRate = c.conversionRate;
       const status = c.status
-      let data = { title: title, emailSent: emailsSent, replies: replies, conversionRate: conversionRate, status: status }
+      let data = { id: c.id, title: title, emailSent: emailsSent, replies: replies, conversionRate: conversionRate, status: status }
       return data
     })
     setCampaign(content)
   }
+  useEffect(() => {
+    fetchCampaignData()
+  }, [])
+
 
   return (
     <>
