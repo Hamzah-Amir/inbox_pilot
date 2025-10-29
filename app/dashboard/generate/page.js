@@ -12,6 +12,7 @@ const EmailGenerationPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { data: session, status } = useSession();
     const [campaigns, setCampaigns] = useState([])
+    const [loading, setloading] = useState(false)
     const [email, setEmail] = useState()
     const router = useRouter()
 
@@ -34,6 +35,7 @@ const EmailGenerationPage = () => {
     }, [session])
 
     const onSubmit = async (data) => {
+        setloading(true)
         const a = await fetch("/api/personalize", {
             method: "POST",
             headers: {
@@ -105,6 +107,7 @@ const EmailGenerationPage = () => {
                             {...register("tone", { required: true })}
                         >
                             <option value="Persuasive & Witty">Inbox Pilot's default</option>
+                            <option value="Persuasive & Confident">B2B Special</option>
                             <option value="Professional">Professional</option>
                             <option value="Persuasive">Persuasive</option>
                             <option value="Friendly">Friendly</option>
@@ -128,8 +131,17 @@ const EmailGenerationPage = () => {
 
                         <button className=" border mt-6 border-cyan-600 cursor-pointer rounded-lg p-2 px-6 font-bold bg-cyan-500"
                             type='submit'
+                            disabled={loading}
                         >
-                            Create Campaign
+                            {loading ? (
+                                <svg className="animate-spin h-5 justify-center items-center relative left-[25vw] w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                            ) : (
+                                "Generate Email"
+                            )}
+                            
                         </button>
                     </form>
                 </section>
