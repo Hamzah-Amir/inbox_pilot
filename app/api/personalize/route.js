@@ -13,9 +13,11 @@ export async function POST(req) {
     }
   })
 
+  let emailsGenerated = user.emailsGenerated
+
   const prompt = `You are InboxPilot — an AI expert in writing short, highly personalized cold emails that sound human and get replies.
 
-Your job: generate *2 complete cold emails* (each 80-120 words max) based on the prospect's data below.
+Your job: generate *1 complete cold email* (80-120 words max) based on the prospect's data below.
 
 Each email should include:
 - A personalized intro (based on their company, role, or product)
@@ -34,10 +36,8 @@ Input Data:
 
 Output Format (JSON):
 {
-  "emails": [
-    "Full first email here...",
-    "Full second email here..."
-  ]
+  subject: "subject of email....",
+  body: "body of email...",
 }
 `
 
@@ -47,7 +47,36 @@ Output Format (JSON):
     contents: prompt
   })
 
+  let email;
   const response = llm.text
-  console.log("Response from Google Gemini LLM:", response)
-  return new Response(JSON.stringify({ success: true, recieved: response }))
+  const match = response.match(/```(?:json)?([\s\S]*?)```/);
+  if (match) {
+    const cleanJSON = match[1].trim();
+    const data = JSON.parse(cleanJSON);
+    email = data;
+    console.log("Generated Emails:", email);
+  }
+
+  const savedEmail = await prisma.email.create({
+    data: {
+      userId: session.user.id,
+      campaignId: body.campaignId,
+      recipentName: body.recipentName,
+      recipentEmail: body.recipentEmail,
+      CompanyName: body.companyName,
+      Tone: body.tone,
+      output: JSON.stringify(email)
+    }
+  })
+
+  await prisma.user.update({
+    where: {
+      id: session.user.id
+    },
+    data:{
+      emailsGenerated: {increment: 1}
+    }
+  })
+  
+  return new Response(JSON.stringify({ success: true, recieved: savedEmail.id }))
 }
