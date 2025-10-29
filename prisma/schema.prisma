@@ -27,7 +27,8 @@ model Email {
     id  String @id @default(cuid())
     userId String
     campaignId String
-    prompt String
+    recipentEmail String
+    recipentName String?
     output String @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
