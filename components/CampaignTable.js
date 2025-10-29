@@ -38,7 +38,7 @@ export default function CampaignTable({ campaigns }) {
                     {c.status}
                   </span>
                 </td>
-                <td className="py-3 px-4">{c.emailsSent}</td>
+                <td className="py-3 px-4">{c.emailSent}</td>
                 <td className="py-3 px-4">{c.replies}</td>
                 <td className="py-3 px-4">
                   {c.conversionRate.toFixed(1)}%
