@@ -4,6 +4,7 @@ import React from 'react'
 import { getCampaign } from '@/actions/useractions'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { set, useForm } from 'react-hook-form'
 
 const EmailGenerationPage = () => {
@@ -11,6 +12,8 @@ const EmailGenerationPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { data: session, status } = useSession();
     const [campaigns, setCampaigns] = useState([])
+    const [email, setEmail] = useState()
+    const router = useRouter()
 
     const getCampaignData = async () => {
         const campaignData = await getCampaign(session.user.id)
@@ -20,7 +23,6 @@ const EmailGenerationPage = () => {
             title: c.title,
             goal: c.goal,
         }))
-        console.log("Mapped campaigns:", mapped);
         setCampaigns(mapped)
     }
 
@@ -32,7 +34,7 @@ const EmailGenerationPage = () => {
     }, [session])
 
     const onSubmit = async (data) => {
-        const res = await fetch("/api/personalize", {
+        const a = await fetch("/api/personalize", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -46,8 +48,11 @@ const EmailGenerationPage = () => {
                 productDescription: data.productDescription
             })
         })
-    }
 
+        const res = await a.json()
+        const id = res.recieved
+        router.push(`/dashboard/generate/result/${id}`)
+    }
 
     return (
         <>
