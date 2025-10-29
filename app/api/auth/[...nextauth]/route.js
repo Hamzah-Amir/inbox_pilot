@@ -10,7 +10,6 @@ export const authOptions = {
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             profile(profile) {
-                console.log("Google profile:", profile)
                 console.log(profile.email.split("@")[0])
                 return {
                     id: profile.sub,
@@ -27,7 +26,6 @@ export const authOptions = {
                 session.user.id = user.id
                 console.log(session.user) // Add this line to log the session user object
             }
-            console.log(session.user)
             return session
         },
 }}
