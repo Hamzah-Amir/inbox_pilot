@@ -3,11 +3,13 @@ import Sidebar from '@/components/Sidebar'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { createCampaign } from '@/actions/useractions'
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
 const createCampaignPage = () => {
 
     const {data: session, status}  = useSession()
+    const router = useRouter()
 
     const {
         register,
@@ -20,6 +22,7 @@ const createCampaignPage = () => {
     const onSubmit = async (data) => {
         await createCampaign(session.user.id, data)
         alert("Campaign Created Successfully!")
+        router.push('/dashboard/campaigns')
     }
 
     return (
@@ -42,7 +45,7 @@ const createCampaignPage = () => {
                             <input className='border w-full rounded-lg p-2 h-11 placeholder:text-[#8b99ad] focus:border-[#22D3EE] outline-none'
                                 placeholder='e.g., SaaS Outreach'
                                 id='campaignTitle'
-                                {...register("campaignTitle", { required: true })}
+                                {...register("campaignTitle", { required: true })}  
                             />
                             {errors.campaignTitle && <p className="text-sm text-red-500 mt-1">Campaign title is required!</p>}
                         </div>
