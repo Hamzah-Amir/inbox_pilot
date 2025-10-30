@@ -57,7 +57,9 @@ const ResultPage = async ({ params }) => {
                         <div className='border-b border-gray-600'></div>
                         <div className='mt-12'>
                             <p>Hi {email.recipentName},</p>
+                            <p>{content.intro}</p>
                             <p>{content.body}</p>
+                            <p>{content.closing}</p>
                         </div>
                     </div>
                 </section>
