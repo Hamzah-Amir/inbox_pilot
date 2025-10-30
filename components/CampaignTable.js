@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default function CampaignTable({ campaigns }) {
-
+export default function CampaignTable({ campaigns, emailGenerated }) {
+  const email = emailGenerated
   return (
     <div className="bg-gray-900 rounded-2xl w-full h-full py-6 shadow-lg">
       <h2 className="text-xl font-semibold text-white p-2 px-4 mb-4">Your Campaigns</h2>
@@ -11,6 +11,7 @@ export default function CampaignTable({ campaigns }) {
           <thead>
             <tr className="border-b border-gray-700 text-gray-400 text-left">
               <th className="py-1 px-4">Title</th>
+              <th className="py-1 px-4">Emails Generated</th>
               <th className="py-1 px-4">Emails Sent</th>
               <th className="py-1 px-4">Replies</th>
               <th className="py-1 px-4">Conversion</th>
@@ -26,6 +27,7 @@ export default function CampaignTable({ campaigns }) {
               >
                 <td className="py-2 px-4 mr-8 font-medium text-white">{c.title}</td>
 
+                <td className="py-1 px-4 ">{email}</td>
                 <td className="py-1 px-4 ">{c.emailSent}</td>
                 <td className="py-1 px-4">{c.replies}</td>
                 <td className="py-1 px-4">
