@@ -40,3 +40,32 @@ export async function fetchEmailById(emailId) {
     return email
 }
 
+export const fetchRecentEmails = async (session) => {
+    const recentEmails = await prisma.email.findMany({
+        where: { userId: session.user.id },
+        orderBy: { createdAt: 'desc' },
+        take: 3,
+    });
+    return recentEmails;
+}
+
+export async function getUser (email) {
+    const user = prisma.user.findUnique({
+        where: {
+            email: email
+        }
+    })
+    return user
+} 
+
+export async function getEmailsByUserId(userId) {
+    const emails = await prisma.email.findMany({
+        where: {
+            userId: userId
+        },
+        include: {
+            replies: true
+        }
+    })
+    return emails
+}
