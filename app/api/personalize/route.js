@@ -39,7 +39,9 @@ Input Data:
 Output Format (JSON):
 {
   subject: "subject of email....",
-  body: "body of email...",
+  intro: "personalized intro...",
+  body: "main email body...",
+  closing: "polite call-to-action..."
 }
 `
 
