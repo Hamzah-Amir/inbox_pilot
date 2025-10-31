@@ -7,6 +7,7 @@ import { getUser } from '@/actions/useractions'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import React from 'react'
+import { set } from 'react-hook-form'
 
 const page = () => {
 
@@ -14,13 +15,15 @@ const page = () => {
   const [email, setEmail] = useState([])
   const [emailData, setEmailData] = useState([])
   const [emailsGenerated, setEmailsGenerated] = useState(null)
+  const [limit, setLimit] = useState(null)
   const { data: session } = useSession()
 
   const fetchEmailGenerated = async () => {
     const user = await getUser(session.user.email)
     const emailGenerated = user.emailsGenerated
+    const limit = user.emailLimit
+    setLimit(limit)
     setEmailsGenerated(emailGenerated)
-    return emailGenerated
   }
 
   const fetchCampaignData = async () => {
@@ -61,6 +64,7 @@ const page = () => {
     setEmail(content)
     setEmailData(emailData)
   }
+
   useEffect(() => {
     if (session) {
       fetchCampaignData()
@@ -69,6 +73,8 @@ const page = () => {
     }
   }, [session])
 
+  const used = emailsGenerated ?? 0
+  const max = limit ?? 0
 
   return (
     <>
@@ -78,18 +84,25 @@ const page = () => {
           <div className=' '>
             <h1 className='text-3xl font-bold mt-8'>Your campaigns</h1>
             <span className='text-[16px] text-gray-400'>Manage and track your AI-powered email campaigns</span>
-            <Link href='/dashboard/generate'>
-              <button className='bg-blue-600 bottom-16 left-56 relative hover:bg-blue-700 text-white px-4 py-2 rounded-md float-right mt-8 mr-4'>
-                Generate New Email
-              </button>
-            </Link>
+            {
+            used < max ? (
+              <Link href='/dashboard/generate'>
+                <button className='bg-blue-600 bottom-16 left-56 relative hover:bg-blue-700 text-white px-4 py-2 rounded-md float-right mt-8 mr-4'>
+                  Generate New Email
+                </button>
+              </Link>
+            ) : (
+              <Link href='/pricing'>
+                <button className='bg-blue-600 bottom-16 left-56 relative hover:bg-blue-700 text-white px-4 py-2 rounded-md float-right mt-8 mr-4'>
+                  Upgrade your plan
+                </button>
+              </Link>
+            )}
           </div>
           {/* Plan & Usage bar */}
           <div className='w-[80vw] my-6'>
             {(() => {
-              const limit = 5
-              const used = emailsGenerated ?? 0
-              const pct = Math.min(100, Math.round((used / limit) * 100))
+              const pct = Math.min(100, Math.round((used / max) * 100))
               return (
                 <div className='bg-[#08121A] rounded-2xl p-4 shadow-inner border border-gray-800'>
                   <div className='flex items-center justify-between'>
@@ -98,7 +111,7 @@ const page = () => {
                       <p className='text-sm text-gray-400'>Usage this month</p>
                     </div>
                     <div className='flex items-center gap-4'>
-                      <span className='text-sm text-gray-300'>{used}/{limit} generations</span>
+                      <span className='text-sm text-gray-300'>{used}/{max} generations</span>
                       <span className='bg-[#0f2b34] text-cyan-300 text-sm px-3 py-1 rounded-full border border-cyan-800'>free Plan</span>
                     </div>
                   </div>
@@ -116,7 +129,7 @@ const page = () => {
           </div>
         </section>
         <section className='mx-[17.5vw] flex gap-8 justify-between h-[60vh] w-[80vw] mt-28'>
-          <div className='border rounded-2xl p-6 w-full h-full bg-gray-900 border-gray-800'>
+          <div className='border rounded-2xl p-6 w-full h-full bg-gray-900 border-gray-800 flex flex-col'>
             <h1 className='text-3xl font-bold'> AI Insights</h1>
             <div className='flex items-center justify-center'>
               <h1 className='text-5xl text-center mt-[25vh] '> Coming Soon...</h1>
@@ -126,34 +139,36 @@ const page = () => {
             <h1 className='text-3xl mb-6 font-bold'>
               Recent Activity
             </h1>
-            {/* assign email from use state using usestate */}
-            {email.map((content, index) => {
-              const meta = emailData[index] // matching metadata
-              if (!meta) return null
+            {/* scrollable list area */}
+            <div className='flex-1 overflow-auto pr-2'>
+              {email.map((content, index) => {
+                const meta = emailData[index] // matching metadata
+                if (!meta) return null
 
-              return (
-                <div key={meta.id} className="mb-4 border-b border-gray-700 pb-4">
-                  <div className='flex gap-2 items-center'>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                return (
+                  <div key={meta.id} className="mb-4 border-b border-gray-700 pb-4">
+                    <div className='flex gap-2 items-center'>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
 
-                      <circle cx="12" cy="12" r="12" fill="#22D3EE" />
+                        <circle cx="12" cy="12" r="12" fill="#22D3EE" />
 
-                      <path d="M5 8h14v8H5V8zm0 0l7 5 7-5" fill="none" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <span>
-                      <p className="text-[15px] font-extralight">{meta.recipentEmail}</p>
-                      <p className='text-[12px] text-gray-400'>{content.subject}</p>
-                    </span>
+                        <path d="M5 8h14v8H5V8zm0 0l7 5 7-5" fill="none" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <span>
+                        <p className="text-[15px] font-extralight">{meta.recipentEmail}</p>
+                        <p className='text-[12px] text-gray-400'>{content.subject}</p>
+                      </span>
+                    </div>
+                    <p className="text-gray-400 text-sm">
+                      Sent on: {new Date(meta.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
-                  <p className="text-gray-400 text-sm">
-                    Sent on: {new Date(meta.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-              )
-            })}
-            <div className='top-32 relative'>
+                )
+              })}
+            </div>
+            <div className='mt-4'>
               <Link href='/dashboard/activity'>
-                <button className='bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md mt-4 w-full'>
+                <button className='bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md w-full'>
                   View All Activity
                 </button>
               </Link>
