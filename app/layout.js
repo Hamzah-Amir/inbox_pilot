@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <SessionWrapper>
       <body>
-        <div className="text-white min-h-screen bg-[#071021]">
+        <div className="text-white min-h-screen bg-[#071021] pt-18">
           <Navbar />
           {children}
           <Footer />
