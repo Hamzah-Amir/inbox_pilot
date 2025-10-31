@@ -13,7 +13,7 @@ const Navbar = () => {
 
 
     return (
-      <header className='bg-[#071021] border-b border-gray-700 text-white'>
+      <header className='fixed top-0 left-0 right-0 z-50 bg-[#071021] border-b border-gray-700 text-white'>
         <nav className='flex px-10 justify-between items-center p-4'>
           <div className='flex justify-center items-center gap-5'>
             <div className='img'><Image src='/fav.png' height='50' width='50' alt='Inbox Pilot Logo'></Image></div>
