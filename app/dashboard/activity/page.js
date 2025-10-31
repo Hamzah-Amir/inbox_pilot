@@ -3,6 +3,7 @@ import Sidebar from '@/components/Sidebar'
 import React from 'react'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { getEmailsByUserId } from '@/actions/useractions'
 
 const ActivityPage = () => {
@@ -10,6 +11,7 @@ const ActivityPage = () => {
     const { data: session, status } = useSession()
     const [emails, setEmails] = useState([])
     const [emailId, setEmailId] = useState(null)
+    const router = useRouter()
 
     const getEmail = async () => {
         const emailData = await getEmailsByUserId(session.user.id)
@@ -38,6 +40,11 @@ const ActivityPage = () => {
             case 'confident': return 'bg-purple-800 text-purple-200'
             default: return 'bg-gray-700 text-gray-200'
         }
+    }
+
+    const handleClick = (id) => {
+        console.log('Email clicked:', id)
+        router.push(`/dashboard/activity/${id}`)
     }
 
     return (
@@ -84,7 +91,7 @@ const ActivityPage = () => {
                         if (!id) return null
 
                         return (
-                            <article key={c.id} className='p-6 rounded-lg border border-gray-700 bg-linear-to-b from-[#0B1624] to-transparent shadow-sm'>
+                            <article key={c.id} onClick={() =>handleClick(c.id)} className='p-6 rounded-lg border border-gray-700 bg-linear-to-b from-[#0B1624] to-transparent shadow-sm'>
                                 <div className='flex justify-between items-start'>
                                     <h3 className='text-md font-semibold text-white'>{subject}</h3>
                                     <div className='text-gray-400'>
