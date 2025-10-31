@@ -16,11 +16,11 @@ const page = () => {
   const [emailsGenerated, setEmailsGenerated] = useState(null)
   const { data: session } = useSession()
 
-  const fetchEmailGenerated = async () =>{
-      const user = await getUser(session.user.email)
-      const emailGenerated = user.emailsGenerated   
-      setEmailsGenerated(emailGenerated)
-      return emailGenerated     
+  const fetchEmailGenerated = async () => {
+    const user = await getUser(session.user.email)
+    const emailGenerated = user.emailsGenerated
+    setEmailsGenerated(emailGenerated)
+    return emailGenerated
   }
 
   const fetchCampaignData = async () => {
@@ -74,7 +74,7 @@ const page = () => {
     <>
       <main className='min-h-screen'>
         <Sidebar />
-        <section className='campaigns mx-[17.5vw] mb-28 h-[45vh]'>
+        <section className='campaigns mx-[17.5vw] mb-28 min-h-[45vh]'>
           <div className=' '>
             <h1 className='text-3xl font-bold mt-8'>Your campaigns</h1>
             <span className='text-[16px] text-gray-400'>Manage and track your AI-powered email campaigns</span>
@@ -84,11 +84,38 @@ const page = () => {
               </button>
             </Link>
           </div>
-          <div className='border-[0.5px] border-gray-500 my-6 h-full w-[80vw] rounded-2xl'>
-            <CampaignTable campaigns={campaign} emailGenerated={emailsGenerated}/>
+          {/* Plan & Usage bar */}
+          <div className='w-[80vw] my-6'>
+            {(() => {
+              const limit = 5
+              const used = emailsGenerated ?? 0
+              const pct = Math.min(100, Math.round((used / limit) * 100))
+              return (
+                <div className='bg-[#08121A] rounded-2xl p-4 shadow-inner border border-gray-800'>
+                  <div className='flex items-center justify-between'>
+                    <div>
+                      <h3 className='text-lg font-semibold text-gray-100'>Plan & Usage</h3>
+                      <p className='text-sm text-gray-400'>Usage this month</p>
+                    </div>
+                    <div className='flex items-center gap-4'>
+                      <span className='text-sm text-gray-300'>{used}/{limit} generations</span>
+                      <span className='bg-[#0f2b34] text-cyan-300 text-sm px-3 py-1 rounded-full border border-cyan-800'>free Plan</span>
+                    </div>
+                  </div>
+                  <div className='mt-3'>
+                    <div className='w-full h-2 bg-[#0b1b22] rounded-full overflow-hidden'>
+                      <div className='h-2 bg-cyan-400 transition-all' style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                </div>
+              )
+            })()}
+          </div>
+          <div className='border-[0.5px] border-gray-500 my-6 w-[80vw] rounded-2xl'>
+            <CampaignTable campaigns={campaign} emailGenerated={emailsGenerated} />
           </div>
         </section>
-        <section className='mx-[17.5vw] flex gap-8 justify-between h-[60vh] w-[80vw]'>
+        <section className='mx-[17.5vw] flex gap-8 justify-between h-[60vh] w-[80vw] mt-28'>
           <div className='border rounded-2xl p-6 w-full h-full bg-gray-900 border-gray-800'>
             <h1 className='text-3xl font-bold'> AI Insights</h1>
             <div className='flex items-center justify-center'>
@@ -114,8 +141,8 @@ const page = () => {
                       <path d="M5 8h14v8H5V8zm0 0l7 5 7-5" fill="none" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <span>
-                    <p className="text-[15px] font-extralight">{meta.recipentEmail}</p>
-                    <p className='text-[12px] text-gray-400'>{content.subject}</p>
+                      <p className="text-[15px] font-extralight">{meta.recipentEmail}</p>
+                      <p className='text-[12px] text-gray-400'>{content.subject}</p>
                     </span>
                   </div>
                   <p className="text-gray-400 text-sm">
@@ -125,11 +152,11 @@ const page = () => {
               )
             })}
             <div className='top-32 relative'>
-            <Link href='/dashboard/activity'>
-              <button className='bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md mt-4 w-full'>
-                View All Activity
-              </button>
-            </Link>
+              <Link href='/dashboard/activity'>
+                <button className='bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md mt-4 w-full'>
+                  View All Activity
+                </button>
+              </Link>
             </div>
           </div>
         </section>
