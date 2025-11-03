@@ -13,8 +13,7 @@ const ResultPage = async ({ params }) => {
             <div>Email not found</div>
         )
     }
-
-    const campaignId = email.campaignId
+    
     const emailWithCampaign = await prisma.email.findUnique({
         where: { id: emailId },      // your email ID
         include: {
@@ -30,7 +29,7 @@ const ResultPage = async ({ params }) => {
         <>
             <main className='mx-[17.5vw] min-h-screen'>
                 <Sidebar />
-                <section className='min-w-[45vw] min-h-[70vh] mx-[15vw] my-[10vh] rounded-2xl border bg-[#101c33] border-gray-800'>
+                <section className='min-w-[45vw] min-h-[80vh] mx-[15vw] my-[10vh] rounded-2xl border bg-[#101c33] border-gray-800'>
                     <div className='p-6'>
                         <div className='flex items-center gap-4 mb-6'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
