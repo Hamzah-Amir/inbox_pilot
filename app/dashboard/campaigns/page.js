@@ -3,6 +3,7 @@ import Sidebar from '@/components/Sidebar'
 import React from 'react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { getCampaign } from '@/actions/useractions'
 
@@ -41,6 +42,20 @@ const page = () => {
             fetchCampaigns()
         }
     }, [session, status])
+
+    // Write a function to edit campaign details..
+    const router = useRouter()
+
+    const handleEdit = async (campaignId) => {
+        // navigate to the campaign edit page where the form to edit details exists
+        // keep this function simple: push to the edit route with the campaign id
+        if (!campaignId) return
+        try {
+            router.push(`/dashboard/campaigns/${campaignId}/edit`)
+        } catch (err) {
+            console.error('Failed to navigate to edit page', err)
+        }
+    }
 
 
 
@@ -101,7 +116,7 @@ const page = () => {
                                         <td className="py-3 px-4">{c.startDate.toLocaleDateString()}</td>
                                         <td className='py-3 px-4'>{c.endDate ? c.endDate.toLocaleDateString():"Not specified"}</td>
                                         <td className="py-4 px-4 space-x-2">
-                                        <button className="hover:text-cyan-400"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
+                                        <button onClick={() => handleEdit(c.id)} className="edit hover:text-cyan-400"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                         </svg></button>
                                         <button className="hover:text-cyan-400"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
