@@ -22,6 +22,17 @@ model User {
     accounts Account[]  // back-relation
 }
 
+model WebsiteData {
+  id         String   @id @default(cuid())
+  emailId    String   @unique
+  domain     String
+  headline   String?
+  subheadline String?
+  pageText   String?  // Full text for LLM parsing
+  createdAt  DateTime @default(now())
+
+  email      Email    @relation(fields: [emailId], references: [id], onDelete: Cascade)
+}
 
 model Email {
     id  String @id @default(cuid())
@@ -31,13 +42,21 @@ model Email {
     recipentName String?
     CompanyName String
     Tone String
+    emailType  EmailType @default(TEMPLATE) // TEMPLATE | WEBSITE_PERSONALIZED | LINKEDIN_PERSONALIZED
     output String @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     replies Reply[]
+    WebsiteData WebsiteData?
 
     user User @relation(fields: [userId], references: [id])
     campaign   Campaign @relation(fields: [campaignId], references: [id])
+}
+
+enum EmailType {
+  TEMPLATE
+  WEBSITE_PERSONALIZED
+  LINKEDIN_PERSONALIZED
 }
 
 model Campaign {
