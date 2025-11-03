@@ -16,6 +16,20 @@ export async function getCampaign(id) {
     return campaign
 }
 
+export async function deleteCampaign(id) {
+  try {
+    await prisma.campaign.delete({
+      where: { id },
+    });
+    console.log(`✅ Campaign ${id} deleted successfully.`);
+    return { success: true };
+  } catch (error) {
+    console.error(`❌ Failed to delete campaign ${id}:`, error.message);
+    return { success: false, error: error.message };
+  }
+}
+
+
 export async function createCampaign(id, data) {
     const campaign = await prisma.campaign.create({
         data: {
