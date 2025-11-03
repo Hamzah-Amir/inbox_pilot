@@ -45,21 +45,34 @@ Output Format (JSON):
 }
 `
 
-  const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY })
+  const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
   const llm = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: prompt
-  })
+    contents: [
+      {
+        role: "user",
+        parts: [
+          {
+            text: prompt
+          }
+        ]
+      }
+    ],
+    generationConfig: {
+      responseMimeType: "application/json",
+      temperature: 0.7,
+    }
+  });
 
-  let email;
-  const response = llm.text
-  const match = response.match(/```(?:json)?([\s\S]*?)```/);
-  if (match) {
-    const cleanJSON = match[1].trim();
-    const data = JSON.parse(cleanJSON);
-    email = data;
-    console.log("Generated Emails:", email);
-  }
+  let raw = llm.candidates[0].content.parts[0].text.trim();
+
+  // Remove ```json ``` or ``` wrappers if they exist
+  raw = raw.replace(/```json|```/g, "").trim();
+
+  console.log("CLEANED RAW:", raw);
+
+  const email = JSON.parse(raw);
+
 
   const savedEmail = await prisma.email.create({
     data: {
@@ -77,10 +90,10 @@ Output Format (JSON):
     where: {
       id: session.user.id
     },
-    data:{
-      emailsGenerated: {increment: 1}
+    data: {
+      emailsGenerated: { increment: 1 }
     }
   })
-  
+
   return new Response(JSON.stringify({ success: true, recieved: savedEmail.id }))
-}
+}   
