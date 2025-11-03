@@ -1,12 +1,66 @@
+'use client'
 import React from 'react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
-export const metadata = {
-  title: 'Pricing — Inbox Pilot',
-  description: 'Choose the right plan for your cold email personalization needs. Start with our free plan or upgrade to Pro for advanced features.',
-}
+// export const metadata = {
+//   title: 'Pricing — Inbox Pilot',
+//   description: 'Choose the right plan for your cold email personalization needs. Start with our free plan or upgrade to Pro for advanced features.',
+// }
 
 const PricingPage = () => {
+
+  const { data: session } = useSession();
+
+  const pay = async () => {
+    const a = await fetch("https://api.lemonsqueezy.com/v1/checkouts", {
+      method: "POST",
+        headers: {
+          'Accept': 'application/vnd.api+json',
+          'Content-Type': 'application/vnd.api+json',
+          'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI4NWNlZDQ3ZGMxN2M1MmQ0ZTY4Yzk2OWZjOTE4MDI5MTBiMjkxMzIwMjkxYjM5YTExMDI5ZmY2MWFmMWM5MzI1Y2ExOGJmNGY4MzllODQzZSIsImlhdCI6MTc2MjAwNDMxNS45ODI3OCwibmJmIjoxNzYyMDA0MzE1Ljk4Mjc4MywiZXhwIjoyMDc3NTM3MTE1Ljk2NzUwNSwic3ViIjoiNTg4MDQ0NiIsInNjb3BlcyI6W119.29j5YTt8Altbg7vQMTouq8BTtOd2T95aCQGLnrKQHsF5KsPUHPF7HwigU9kyd4tcHH4s5iU7QjGiaxbtyi5FoXlcMLTqmYgdRW1akVF0HPpOEHnWXbKZa4J48QIcysn3WSEi3MqPQpGVz-WvxMBFbtPDa0OXG6aSSqoj8Y___TRL9DemclC9c6GC4h3ri2fTUzeje3aRMUDMXUeUGyfWpxB_VINXfqZ2o_KUFO9PhBK7YpTBTIpS2vgoGjzgtiDCLs35srX6zDvn3ju1OUFCA0JsVeElzMLbWiBdi11y8VlJ6pFEA6dwDroiNhxJDiqpqRREO70EIn38jjhcNkAQBX6VDIMfIDYW-33Qc0WcKOYCbDClri8V71ZzvyEai8ce7HWdenVD-LAu0KVa1ArjHXleUjCwUfYU1-OBs99dZsmBeuYvkaHbTH3vo2HmDBCOUh67kFNrVqU_16oBB3fwsZpe-DwfxO4LwOH4pdF-Tyzqubej06iZvgURi-nuiAzVYKP66wgloiP4wFvKXfFfauEPVV9_YYf3lGPrzZIcD7-GbZsW0J3af6xXhXU6YstX3WEfI7naupnAUsghPqoDzH1UdKsgOG8hwURqpn_TI0HWa3Wz5-gAi5Mu0DfE0Ny2VVC5cTBV4YICmcCz7066rbq2UqUBkzhby3vFBio8PXs`,
+        },
+      body: JSON.stringify({
+        "data": {
+          "type": "checkouts",
+          "attributes": {
+            "product_options": {
+              "enabled_variants": [1068069]
+            },
+            "checkout_options": {
+              "button_color": "#7047EB"
+            },
+            "checkout_data": {
+              "custom": {
+                "user_id": session?.user?.id
+              }
+            },
+          },
+          "relationships": {
+            "store": {
+              "data": {
+                "type": "stores",
+                "id": '238040'
+              }
+            },
+            "variant": {
+              "data": {
+                "type": "variants",
+                "id": "1068069"
+
+              }
+            }
+          }
+        }
+
+      })
+    })
+
+    const res = await a.json();
+    console.log("RES", res);
+    window.location.href = res.data.attributes.url;
+  }
+
   return (
     <main className="min-h-screen bg-[#071021] text-gray-100">
       <div className="max-w-6xl mx-auto px-6 py-20">
@@ -52,7 +106,7 @@ const PricingPage = () => {
             </ul>
 
             <Link className="block text-center py-3 px-6 rounded-lg border-2 border-cyan-600 text-cyan-400 hover:bg-cyan-600/10 transition" href="/dashboard">
-                Get Started Free
+              Get Started Free
             </Link>
           </div>
 
@@ -105,17 +159,17 @@ const PricingPage = () => {
               </li>
             </ul>
 
-            <Link className="block text-center py-3 px-6 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition" href="/dashboard">
-           
-                Upgrade to Pro
-            </Link>
+            <button onClick={() => pay()} className="block text-center py-3 px-6 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition">
+
+              Upgrade to Pro
+            </button>
           </div>
         </div>
 
         {/* FAQ Section */}
         <section className="max-w-3xl mx-auto">
           <h2 className="text-3xl font-semibold mb-8 text-center">Frequently Asked Questions</h2>
-          
+
           <div className="space-y-6">
             <div className="bg-[#0b1724] border border-gray-800 rounded-xl p-6">
               <h3 className="text-xl font-semibold mb-2">What happens when I reach my email limit?</h3>
@@ -139,7 +193,7 @@ const PricingPage = () => {
           <h2 className="text-2xl font-semibold mb-4">Ready to get started?</h2>
           <p className="text-gray-400 mb-8">Try our free plan or go Pro — no credit card required for free plan</p>
           <Link href="/dashboard" className="inline-block py-3 px-8 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition">
-              Start Free Trial
+            Start Free Trial
           </Link>
         </div>
       </div>
