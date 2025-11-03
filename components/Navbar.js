@@ -63,7 +63,7 @@ const Navbar = () => {
               <span>{session?.user?.credits ?? '0'} credits</span>
             </div>
 
-            <Link href="/dashboard/generate">
+            <Link href="/dashboard/generate/template-personalization">
               <button className='bg-cyan-500 hover:bg-cyan-400 text-black px-4 py-2 rounded-md flex items-center gap-2'>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2 11a1 1 0 011-1h6V4a1 1 0 112 0v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H3a1 1 0 01-1-1z" />
