@@ -5,11 +5,11 @@ import axios from 'axios'
 
 const WebsiteProPersonalization = () => {
     
-    const scrapeWebsite = async () => {
+    const scrapeWebsite = async (domain) => {
   const res = await fetch("/api/personalize/website-pro", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ body: "Done" })
+    body: JSON.stringify({ domain: domain })
   });
   const data = await res.json();
   console.log(data.pageText)
@@ -18,7 +18,7 @@ const WebsiteProPersonalization = () => {
 
   return (
     <>
-    <button onClick={()=> scrapeWebsite()}>
+    <button onClick={()=> scrapeWebsite("https://slack.com/")}>
     Web Scrapping
     </button>
     </>

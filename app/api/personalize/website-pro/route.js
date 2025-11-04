@@ -4,7 +4,7 @@ import * as cheerio from 'cheerio'
 export async function POST(req) {
     try {
         const body = await req.json();
-        const domain = "https://slack.com/"
+        const domain = body.domain
 
         if (!domain) {
             return new Response(JSON.stringify({ error: "Domain required" }), { status: 400 });
