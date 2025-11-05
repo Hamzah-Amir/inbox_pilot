@@ -75,7 +75,7 @@ const EmailGenerationPage = () => {
     if (generated >= limit && limit !== null) {
         return (
             <>
-                <main className='min-h-screen mx-[17.5vw] mt-8'>
+                 <main className='min-h-screen mx-[19.5vw] ml-[42vw] mt-8'>
                     <Sidebar />
                     <section className='flex flex-col items-center justify-center min-h-[70vh]'>
                         <div className='w-[60vw] mx-[12vw] border border-[#030b1b] p-8 rounded-[14px] shadow-[#030b1b] shadow-2xl bg-[#0B1624] flex flex-col items-center justify-center gap-6'>

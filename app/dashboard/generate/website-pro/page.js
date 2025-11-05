@@ -14,6 +14,7 @@ const WebsiteProPersonalization = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { data: session } = useSession()
   const [campaigns, setCampaigns] = useState([])
+  const [error, setError] = useState("");
   const [emailType, setEmailType] = useState()
   const [geminiResponse, setGeminiResponse] = useState('')
   const [loading, setloading] = useState(false)
@@ -28,16 +29,6 @@ const WebsiteProPersonalization = () => {
     setCampaigns(mapped)
   }
 
-  const scrapeWebsite = async (domain) => {
-    const res = await fetch("/api/personalize/website-pro", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ domain: domain })
-    });
-    const data = await res.json();
-    console.log(data.pageText)
-  };
-
   useEffect(() => {
     if (session?.user?.id) {
       getCampaignData()
@@ -45,9 +36,23 @@ const WebsiteProPersonalization = () => {
 
   }, [session])
 
+  useEffect(() => {
+    if (!geminiResponse) return;
+
+    const formatted = geminiResponse
+      .replace(/\*\*/g, '')          // remove bold artifacts
+      .replace(/\n{3,}/g, '\n\n');   // normalize whitespace
+
+    setGeminiResponse(formatted);
+
+  }, [geminiResponse])
+
+
   const onSubmit = async (data) => {
+    console.log(data)
     setloading(true)
     setGeminiResponse("")
+    setError("");
     try {
 
       const response = await fetch("/api/personalize/website-pro", {
@@ -56,8 +61,8 @@ const WebsiteProPersonalization = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          campaignID: data.campaignID,
           website: data.website,
+          campaignId: data.campaignId,
           recipientName: data.recipientName,
           recipientRole: data.recipientRole,
           yourName: data.yourName,
@@ -65,7 +70,8 @@ const WebsiteProPersonalization = () => {
         })
       })
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${response.status}`);
       }
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -80,7 +86,8 @@ const WebsiteProPersonalization = () => {
         setGeminiResponse((prev) => prev + chunk);
       }
     } catch (error) {
-      console.log(error)
+      console.log("Streaming Error:", error.message);
+      setError(error.message || "Something broke while generating email."); // ← now user know
     } finally {
       setloading(false)
     };
@@ -183,6 +190,11 @@ const WebsiteProPersonalization = () => {
                 className="w-full border p-2 rounded h-28"
               />
             </div>
+            {error && (
+              <div className="text-red-500 text-sm mb-4 border border-red-500/30 bg-red-500/10 p-2 rounded">
+                {error}
+              </div>
+            )}
             <button type="submit" disabled={loading} className="w-full bg-black text-white py-2 rounded hover:bg-gray-800">
               {loading ? 'Generating...' : 'Generate Email'}
             </button>

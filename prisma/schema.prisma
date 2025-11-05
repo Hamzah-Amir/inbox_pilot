@@ -27,8 +27,8 @@ model WebsiteData {
   emailId    String   @unique
   domain     String
   headline   String?
-  subheadline String?
-  pageText   String?  // Full text for LLM parsing
+  subHeadline String?
+  pageText   String? @db.Text  // Full text for LLM parsing
   createdAt  DateTime @default(now())
 
   email      Email    @relation(fields: [emailId], references: [id], onDelete: Cascade)
@@ -38,10 +38,10 @@ model Email {
     id  String @id @default(cuid())
     userId String
     campaignId String
-    recipentEmail String
+    recipentEmail String?
     recipentName String?
-    CompanyName String
-    Tone String
+    companyName String
+    Tone String?
     emailType  EmailType @default(TEMPLATE) // TEMPLATE | WEBSITE_PERSONALIZED | LINKEDIN_PERSONALIZED
     output String @db.Text
     createdAt DateTime @default(now())

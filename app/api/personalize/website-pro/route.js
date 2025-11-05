@@ -5,6 +5,15 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 import { getCampaign } from "@/actions/useractions";
 import puppeteer from "puppeteer";
 import * as cheerio from 'cheerio'
+import { prisma } from "@/lib/prisma";
+import { parse } from "tldts";
+
+function extractCompanyName(domain) {
+  const url = domain.startsWith("http") ? domain : `https://${domain}`;
+  const parsed = parse(url);
+
+  return parsed.domainWithoutSuffix || parsed.domain || "";
+}
 
 export async function POST(req) {
     const session = await getServerSession(authOptions)
@@ -22,6 +31,7 @@ export async function POST(req) {
         }
 
         const url = domain.startsWith("http") ? domain : `https://${domain}`;
+        let companyName = extractCompanyName(url)
 
         const browser = await puppeteer.launch({ headless: true });
         const page = await browser.newPage();
@@ -82,10 +92,33 @@ export async function POST(req) {
             .slice()
             .join(" ");
 
+
         pageText = pageText.slice(0, 1200); // Limiting content to 1.2k characters
-        console.log(pageText);
+        console.log(pageText)
 
         await browser.close();
+
+        const email = await prisma.email.create({
+            data: {
+                userId: session.user.id,
+                campaignId: campaignId,
+                recipentEmail: "",
+                companyName: companyName,
+                recipentName: recipientName,
+                emailType: "WEBSITE_PERSONALIZED",
+                output: "",
+            }
+        })
+
+        await prisma.websiteData.create({
+            data: {
+                emailId: email.id,
+                domain: domain,
+                headline: headline,
+                subHeadline: subHeadline,
+                pageText: pageText
+            }
+        })
 
         const prompt = `You are an expert outbound copywriter. You write short, concise, articulate emails that sound human — not AI. You do not guess or invent details. You base every line on the context provided.
 
@@ -104,10 +137,11 @@ export async function POST(req) {
 - Sender Name: ${yourName}
 - Campaign Focus / Goal: ${campaign.goal}
 - Email Type: ${emailType}
+- Tone: concise, direct, professional. No hype language. No “hope you're doing well.” No emojis.
 
 ### Requirements
 1. The opening sentence must directly reference a meaningful part of the company's positioning or messaging (headline, wording tone, or strategic theme).
-2. Avoid flattery, hype, or filler phrases (e.g., “amazing work”, “innovative solution”, “saw you’re doing great things”).
+2. Avoid flattery, hype, or filler phrases (e.g., “amazing work”, “innovative solution”, “saw you're doing great things”).
 3. Write in a confident, friendly, adult tone. No corporate fluff. No emojis.
 4. Keep the full email between **50 and 90 words**.
 5. Show a clear angle of relevance to their work (e.g., efficiency, product velocity, workflow clarity, collaboration speed).
@@ -128,16 +162,27 @@ Write the email now.`
         // Start streaming content
         const result = await model.generateContentStream(prompt);
 
+        let fullEmail = '';
         // Create a ReadableStream for the frontend
         const readableStream = new ReadableStream({
             async start(controller) {
                 for await (const chunk of result.stream) {
                     const chunkText = chunk.text();
+                    fullEmail += chunkText
                     controller.enqueue(new TextEncoder().encode(chunkText));
                 }
+                await prisma.email.update({
+                    where: {
+                        id: email.id
+                    },
+                    data: {
+                        output: fullEmail
+                    }
+                })
                 controller.close();
             },
         });
+
 
         return new NextResponse(readableStream, {
             headers: { "Content-Type": "text/plain" },
