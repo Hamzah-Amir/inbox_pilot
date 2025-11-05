@@ -2,16 +2,20 @@
 import Sidebar from '@/components/Sidebar'
 import React from 'react'
 import { getCampaign } from '@/actions/useractions'
+import { getUser } from '@/actions/useractions'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { set, useForm } from 'react-hook-form'
+import Link from 'next/link'
 
 const EmailGenerationPage = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { data: session, status } = useSession();
     const [campaigns, setCampaigns] = useState([])
+    const [limit, setlimit] = useState(null)
+    const [generated, setgenerated] = useState(null)
     const [loading, setloading] = useState(false)
     const [email, setEmail] = useState()
     const router = useRouter()
@@ -27,8 +31,20 @@ const EmailGenerationPage = () => {
         setCampaigns(mapped)
     }
 
+    const getUserData = async () => {
+        const user = await getUser(session.user.email)
+        const limit = user.emailLimit
+        console.log(limit)
+        setlimit(limit)
+        const generated = user.emailsGenerated
+        console.log(generated)
+        setgenerated(generated)
+        return { limit, generated }
+    }
+
     useEffect(() => {
         if (session?.user?.id) {
+            getUserData()
             getCampaignData()
         }
 
@@ -54,6 +70,34 @@ const EmailGenerationPage = () => {
         const res = await a.json()
         const id = res.recieved
         router.push(`/dashboard/generate/result/${id}`)
+    }
+
+    if (generated >= limit && limit !== null) {
+        return (
+            <>
+                 <main className='min-h-screen mx-[19.5vw] ml-[42vw] mt-8'>
+                    <Sidebar />
+                    <section className='flex flex-col items-center justify-center min-h-[70vh]'>
+                        <div className='w-[60vw] mx-[12vw] border border-[#030b1b] p-8 rounded-[14px] shadow-[#030b1b] shadow-2xl bg-[#0B1624] flex flex-col items-center justify-center gap-6'>
+                            <div className='text-red-500 text-lg font-semibold text-center'>
+                                You have reached your email generation limit
+                            </div>
+                            <p className='text-gray-400 text-sm text-center'>
+                                Upgrade your plan to continue generating personalized emails
+                            </p>
+                            <Link href="/pricing">
+                                <button className='bg-cyan-500 hover:bg-cyan-400 text-black px-6 py-3 rounded-lg flex items-center gap-2 font-bold transition-colors duration-200 shadow-lg shadow-cyan-500/20'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M2 11a1 1 0 011-1h6V4a1 1 0 112 0v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H3a1 1 0 01-1-1z" />
+                                    </svg>
+                                    Upgrade your plan
+                                </button>
+                            </Link>
+                        </div>
+                    </section>
+                </main>
+            </>
+        )
     }
 
     return (
@@ -141,7 +185,7 @@ const EmailGenerationPage = () => {
                             ) : (
                                 "Generate Email"
                             )}
-                            
+
                         </button>
                     </form>
                 </section>
