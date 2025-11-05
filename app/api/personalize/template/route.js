@@ -13,7 +13,13 @@ export async function POST(req) {
     }
   })
 
-  const prompt = `You are InboxPilot — an AI expert in writing short, highly personalized cold emails that sound human and get replies.
+  const limit = user.emailLimit
+  const emailsGenerated = user.emailsGenerated
+
+  if (limit < emailsGenerated) {
+
+    
+    const prompt = `You are InboxPilot — an AI expert in writing short, highly personalized cold emails that sound human and get replies.
 
 Your job: generate *1 complete cold email* (100 to 130 words max) based on the prospect's data below.
 
@@ -96,4 +102,8 @@ Output Format (JSON):
   })
 
   return new Response(JSON.stringify({ success: true, recieved: savedEmail.id }))
+
+} else {
+  return new Response(JSON.stringify({body:"Emails Generation Limit Reached!"}))
+}
 }   
