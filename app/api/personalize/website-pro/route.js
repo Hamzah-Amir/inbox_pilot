@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import rs from 'text-readability';
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { getCampaign } from "@/actions/useractions";
 import puppeteer from "puppeteer";
@@ -9,10 +10,10 @@ import { prisma } from "@/lib/prisma";
 import { parse } from "tldts";
 
 function extractCompanyName(domain) {
-  const url = domain.startsWith("http") ? domain : `https://${domain}`;
-  const parsed = parse(url);
+    const url = domain.startsWith("http") ? domain : `https://${domain}`;
+    const parsed = parse(url);
 
-  return parsed.domainWithoutSuffix || parsed.domain || "";
+    return parsed.domainWithoutSuffix || parsed.domain || "";
 }
 
 export async function POST(req) {
@@ -20,9 +21,9 @@ export async function POST(req) {
     try {
         const campaign = await getCampaign(session.user.id)
         const body = await req.json();
-        console.log("body",body)
+        console.log("body", body)
         const campaignId = body.campaignId;
-        console.log("campaign ID",campaignId)
+        console.log("campaign ID", campaignId)
         const domain = body.website;
         const recipientName = body.recipientName;
         const recipientRole = body.recipientRole;
@@ -186,6 +187,67 @@ Write the email now.`
             },
         });
 
+        function countOccurrences(text, term) {
+            if (!text || !term) return 0;
+
+            const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            const regex = new RegExp(`\\b${escapedTerm}\\b`, "gi");
+            const matches = text.match(regex);
+
+            return matches ? matches.length : 0;
+        }
+
+        const extractKeywords = (text) => {
+            if (!text) return [];
+
+            return text
+                .toLowerCase()
+                .replace(/[^a-z0-9\s]/gi, " ")
+                .split(/\s+/)
+                .filter(word => word.length > 3 && !STOP_WORDS.includes(word))
+                .reduce((acc, word) => {
+                    acc[word] = (acc[word] || 0) + 1;
+                    return acc;
+                }, {});
+        }
+
+        function getTopKeywords(freqMap, limit = 5) {
+            return Object.entries(freqMap)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, limit)
+                .map(([word]) => word);
+        }
+
+        function detectTone(text) {
+            const formality = /(?:we are pleased|furthermore|our mission)/i.test(text) ? "formal" : "casual";
+            const avgSentenceLength = text.split(/[.!?]/).map(s => s.trim().split(/\s+/).length).reduce((a, b) => a + b) / text.split(/[.!?]/).length;
+            const pronounStyle = text.includes("you") ? "personal" : "corporate";
+
+            return { formality, avgSentenceLength, pronounStyle };
+        }
+
+        const personalizationScore = countOccurrences(fullEmail, companyName)
+        const freq = extractKeywords(pageText);
+        const keywords = getTopKeywords(freq, 3);
+        const usedKeywords = keywords.filter(k => fullEmail.includes(k))
+        const websiteContextScore = usedKeywords.length
+        const readabilityGrade = rs.fleschKincaidGrade(fullEmail)
+        const siteTone = detectTone(pageText.toLowerCase())
+        const emailTone = detectTone(fullEmail.toLowerCase())
+        const toneMatched =
+            siteTone.formality === emailTone.formality &&
+            Math.abs(siteTone.avgSentenceLength - emailTone.avgSentenceLength) < 5 &&
+            siteTone.pronounStyle === emailTone.pronounStyle;
+
+        await prisma.emailQuality.create({
+            data: {
+                emailId: email.id,
+                personalizationScore: personalizationScore,
+                websiteContextScore: websiteContextScore,
+                readabilityGrade: readabilityGrade,
+                toneMatched: toneMatched
+            }
+        })
 
         return new NextResponse(readableStream, {
             headers: { "Content-Type": "text/plain" },
