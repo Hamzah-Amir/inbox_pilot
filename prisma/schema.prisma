@@ -48,6 +48,7 @@ model Email {
     updatedAt DateTime @updatedAt
     replies Reply[]
     WebsiteData WebsiteData?
+    emailQuality EmailQuality?
 
     user User @relation(fields: [userId], references: [id])
     campaign   Campaign @relation(fields: [campaignId], references: [id])
@@ -97,6 +98,18 @@ model Session {
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model EmailQuality {
+  id          String   @id @default(cuid())
+  emailId     String   @unique
+  personalizationScore Int
+  websiteContextScore   Int
+  readabilityGrade      Float
+  toneMatched           Boolean
+  createdAt   DateTime @default(now())
+
+  email Email @relation(fields: [emailId], references: [id])
 }
 
 model Account {
