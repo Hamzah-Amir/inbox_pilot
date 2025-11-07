@@ -48,10 +48,22 @@ export async function fetchEmailById(emailId) {
     const email = await prisma.email.findUnique({
         where: {
             id: emailId
+        },
+        include: {
+            emailQuality: true
         }
     })
 
     return email
+}
+
+export async function fetchEmailQuality(id) {
+    const emailQuality = await prisma.emailQuality.findFirst({
+        where: {
+            emailId: id
+        }
+    })
+    return emailQuality
 }
 
 export const fetchRecentEmails = async (session) => {
