@@ -33,7 +33,7 @@ const ActivityPage = () => {
     }, [session])
 
     const toneColor = (tone) => {
-        switch (tone.toLowerCase()) {
+        switch (tone) {
             case 'friendly': return 'bg-cyan-700 text-cyan-200'
             case 'professional': return 'bg-blue-800 text-blue-200'
             case 'casual': return 'bg-green-800 text-green-200'
@@ -85,7 +85,7 @@ const ActivityPage = () => {
                 <div className='mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
                     {emails && emails.map((c) => {
                         const id = c.id
-                        const output = JSON.parse(c.output)
+                        const output = (c.output)
                         const subject = output.subject
                         console.log(subject)
                         if (!id) return null
