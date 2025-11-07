@@ -14,10 +14,9 @@ export async function GET() {
     take: 3,
   });
 
-  const content = recentEmails.map(email => {
-    const output = JSON.parse(email.output);
-    return output;
-  });
+  console.log("Emails", recentEmails)
+
+  const content = recentEmails.map(email => email.output);
   console.log(content);
 
   return Response.json({content: content,recentEmails: recentEmails}, { status: 200 });
