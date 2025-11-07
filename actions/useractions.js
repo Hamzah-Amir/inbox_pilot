@@ -90,7 +90,8 @@ export async function getEmailsByUserId(userId) {
             userId: userId
         },
         include: {
-            replies: true
+            replies: true,
+            emailQuality: true
         }
     })
     return emails
