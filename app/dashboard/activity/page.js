@@ -4,31 +4,38 @@ import React from 'react'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { getEmailsByUserId } from '@/actions/useractions'
+import { parseEmailOutput } from '@/lib/parseEmailOutput'
+import { fetchEmailById, getEmailsByUserId } from '@/actions/useractions'
 
 const ActivityPage = () => {
 
     const { data: session, status } = useSession()
     const [emails, setEmails] = useState([])
-    const [emailId, setEmailId] = useState(null)
+    const [emailType, setEmailType] = useState('')
     const router = useRouter()
 
     const getEmail = async () => {
         const emailData = await getEmailsByUserId(session.user.id)
-        const formatted = emailData.map(e => ({
+        // console.log(emailData)
+
+        const formatted = emailData.map(e => (console.log("Company Name", e.companyName), {
+
             id: e.id,
             output: e.output,
             recipentName: e.recipentName,
-            company: e.CompanyName,
+            company: e.companyName,
             tone: e.Tone,
+            emailType: e.emailType,
+            personalizationScore: e.personalizationScore,
+            websiteContextScore: e.websiteContextScore
         }))
+        // console.log("Formatted", formatted)
         setEmails(formatted)
     }
 
     useEffect(() => {
         if (session) {
             getEmail()
-            console.log(emails)
         }
     }, [session])
 
@@ -46,6 +53,7 @@ const ActivityPage = () => {
         console.log('Email clicked:', id)
         router.push(`/dashboard/activity/${id}`)
     }
+
 
     return (
         <main className='min-h-screen mx-[17.5vw] p-6'>
@@ -83,36 +91,34 @@ const ActivityPage = () => {
                 </div>
 
                 <div className='mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-                    {emails && emails.map((c) => {
-                        const id = c.id
-                        const output = (c.output)
-                        const subject = output.subject
-                        console.log(subject)
-                        if (!id) return null
+                    {emails && emails.map((email) => {
+                        const { subject, intro, body, isTemplate } = parseEmailOutput(email)
+                        console.log("EMAIL", email)
 
                         return (
-                            <article key={c.id} onClick={() =>handleClick(c.id)} className='p-6 rounded-lg border border-gray-700 bg-linear-to-b from-[#0B1624] to-transparent shadow-sm'>
-                                <div className='flex justify-between items-start'>
-                                    <h3 className='text-md font-semibold text-white'>{subject}</h3>
-                                    <div className='text-gray-400'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M2.94 6.94A10 10 0 1113.06 17.06 10 10 0 012.94 6.94z" />
-                                        </svg>
-                                    </div>
-                                </div>
+                            <article
+                                key={email.id}
+                                onClick={() => handleClick(email.id)}
+                                className="cursor-pointer p-4 rounded-lg border border-gray-700 bg-[#0F1A2C] hover:bg-[#16253C] transition-colors duration-200 shadow-sm flex flex-col gap-2"
+                            >
+                                {/* Email Subject */}
+                                <h3 className="text-white text-lg font-semibold line-clamp-1">
+                                    {isTemplate ? subject : body.slice(0, 50) + "..."}
+                                </h3>
 
-                                <div className='flex items-center justify-between mt-3'>
-                                    <div>
-                                        <p className='text-gray-400 text-[12px]'>{c.recipentName} • {c.company}</p>
+                                {/* Email Snippet */}
+                                <p className="text-gray-400 text-sm line-clamp-2">
+                                    {isTemplate ? intro.slice(0, 60) + "..." : body.slice(0, 60) + "..."}
+                                </p>
+                                <div className="mt-2 p-2 bg-[#0B1220] rounded-md border border-gray-800">
+                                    <h4 className="text-white font-medium text-sm mb-1">Metrics</h4>
+                                    <div className="text-gray-300 text-xs flex flex-col gap-1">
+                                        <span>Personalization: {email.personalizationScore ?? 0}</span>
+                                        <span>Website Context: {email.websiteContextScore ?? 0}</span>
                                     </div>
-                                    <div className={`px-2 py-1 rounded-full text-[12px] ${toneColor(c.tone)}`}>{c.tone}</div>
-                                </div>
-
-                                <div className='flex justify-end text-gray-400 text-sm mt-4'>
-                                    {c.date}
                                 </div>
                             </article>
-                        )
+                        );
                     })}
 
                 </div>
