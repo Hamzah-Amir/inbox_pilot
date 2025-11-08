@@ -75,7 +75,7 @@ model Email {
     updatedAt DateTime @updatedAt
     replies Reply[]
     WebsiteData WebsiteData?
-    emailQuality EmailQuality[]
+    emailQuality EmailQuality
 
     user User @relation(fields: [userId], references: [id])
     campaign   Campaign @relation(fields: [campaignId], references: [id])
