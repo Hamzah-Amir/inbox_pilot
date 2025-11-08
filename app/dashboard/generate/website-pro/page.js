@@ -16,7 +16,13 @@ const WebsiteProPersonalization = () => {
   const [campaigns, setCampaigns] = useState([])
   const [error, setError] = useState("");
   const [emailType, setEmailType] = useState()
-  const [geminiResponse, setGeminiResponse] = useState('')
+  const [geminiResponse, setGeminiResponse] = useState({
+    subject: "",
+    intro: "",
+    body: "",
+    cta: "",
+    closing: ""
+  });
   const [loading, setloading] = useState(false)
 
   const getCampaignData = async () => {
@@ -36,18 +42,6 @@ const WebsiteProPersonalization = () => {
 
   }, [session])
 
-  useEffect(() => {
-    if (!geminiResponse) return;
-
-    const formatted = geminiResponse
-      .replace(/\*\*/g, '')          // remove bold artifacts
-      .replace(/\n{3,}/g, '\n\n');   // normalize whitespace
-
-    setGeminiResponse(formatted);
-
-  }, [geminiResponse])
-
-
   const onSubmit = async (data) => {
     console.log(data)
     setloading(true)
@@ -66,25 +60,16 @@ const WebsiteProPersonalization = () => {
           recipientName: data.recipientName,
           recipientRole: data.recipientRole,
           yourName: data.yourName,
-          emailType: data.emailType
+          emailType: data.emailType,
+          description: data.instructions
         })
       })
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || `HTTP ${response.status}`);
-      }
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
 
+      const res = await response.json()
+      const emailData = { subject: res.subject, intro: res.intro, body: res.body, cta: res.cta, closing: res.closing }
+      setGeminiResponse(emailData)
+      console.log("Response", res)
       router.push("/dashboard/generate/website-pro/#output")
-      console.log("Streaming starts!")
-      while (!done) {
-        const { value, done: readerDone } = await reader.read();
-        done = readerDone;
-        const chunk = decoder.decode(value, { stream: true });
-        setGeminiResponse((prev) => prev + chunk);
-      }
     } catch (error) {
       console.log("Streaming Error:", error.message);
       setError(error.message || "Something broke while generating email."); // ← now user know
@@ -203,12 +188,21 @@ const WebsiteProPersonalization = () => {
         <section className='my-6 w-[60vw] min-h-[70vh] mx-[12vw] border flex flex-col space-y-4 max-w-xl border-[#030b1b] p-6 rounded-[14px] shadow-[#030b1b] shadow-2xl bg-[#0B1624]' id='output'>
           <h1 className='text-4xl'>Email</h1>
           <div className='w-full min-h-[300px] p-4 border rounded bg-[#0D1A2B] text-white whitespace-pre-wrap'>
-            {loading && !geminiResponse
-              ? Array(7).fill("").map((_, i) => (
+            {loading && !geminiResponse ? (
+              // Loading Skeleton
+              Array(7).fill("").map((_, i) => (
                 <div key={i} className="h-4 bg-gray-700 my-1 rounded animate-pulse"></div>
               ))
-              : geminiResponse
-            }
+            ) : (
+              // Final Render
+              <div className="space-y-2">
+                <p className='font-medium'>{geminiResponse.subject}</p>
+                <p>{geminiResponse.intro}</p>
+                <p>{geminiResponse.body}</p>
+                <p>{geminiResponse.cta}</p>
+                <p>{geminiResponse.closing}</p>
+              </div>
+            )}
           </div>
         </section>
 
