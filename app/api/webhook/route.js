@@ -39,27 +39,25 @@ export async function POST(req) {
       console.log("LIMIT:", user.emailLimit)
 
       console.log(`Webhook processed!`);
+      let customerId = body.data.attributes.customer_id?.toString()
       // Upsert subscription
       const subscription = await prisma.subscription.upsert({
-        where: { userId: userId },       // must match a unique field in the table
+        where: { userId: userId },
         create: {
-          userId,
           subscriptionId: body.data.id,
-          customerId: body.data.attributes.customer?.id || null,
+          customerId: customerId,
+          userId: userId,
           status: body.data.attributes.status_formatted,
-          plan: body.data.attributes.product_name,
-          renewsAt: body.data.renewsAt ? new Date(body.data.renewsAt) : null,
+          renewsAt: body.data.attributes.renews_at ? new Date(body.data.attributes.renews_at) : null,
         },
         update: {
-          subscriptionId: body.data.id,
-          status: body.data.attributes.status_formatted,
-          plan: body.data.attributes.product_name,
-          renewsAt: body.data.renewsAt ? new Date(body.data.renewsAt) : null,
-        }
+          status: body.data.attributes.status,
+          renewsAt: body.data.attributes.renews_at ? new Date(body.data.attributes.renews_at) : null,
+        },
       });
       console.log("Sub ID", subscription.subscriptionId)
-      console.log("CustomerID:", subscription.customerId)
-      console.log("Plan:", subscription.plan)
+      console.log( "CustomerID:", subscription.customerId)
+      console.log( "Plan:", body.data.attributes.product_name)
     }
 
     // // Set email limit based on exact variant name
