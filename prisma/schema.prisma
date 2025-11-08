@@ -29,7 +29,6 @@ model Subscription {
   subscriptionId  String   @unique // from Lemon Squeezy
   customerId      String?         // optional
   status          String          // active, canceled, past_due, etc.
-  plan            String?
   renewsAt        DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
