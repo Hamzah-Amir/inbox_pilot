@@ -62,6 +62,7 @@ const page = () => {
       },
     })
     const data = await res.json()
+    console.log("data", res)
     const content = data.content
     console.log("Res ", content)
     const emailData = data.recentEmails
@@ -96,10 +97,18 @@ const page = () => {
   }
 
   if (plan === 'WEBSITE_PERSONALIZATION') {
-    return <WebsiteDashboard used={used} max={max} plan={plan} campaign={campaign} emailsGenerated={emailsGenerated} email={email} emailData={emailData}/>
+    return <WebsiteDashboard used={used} max={max} plan={plan} campaign={campaign} emailsGenerated={emailsGenerated} email={email} emailData={emailData} />
   }
 
-  return <PricingPage />
+  if (plan === 'FREE') {
+    return <WebsiteDashboard used={used} max={max} plan={plan} campaign={campaign} emailsGenerated={emailsGenerated} email={email} emailData={emailData} />
+  }
+
+  return (
+    <div className='flex justify-center items-center h-screen'>
+      <div className='h-10 w-10 border-4 border-red-600 border-t-transparent animate-spin rounded-full'></div>
+    </div>
+  )
 
 }
 
