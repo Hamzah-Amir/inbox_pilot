@@ -19,20 +19,24 @@ const ActivityPage = () => {
 
     const getEmail = async () => {
         const emailData = await getEmailsByUserId(session.user.id)
+        console.log("email data", emailData)
 
-        const formatted = emailData.map(e => ({
-
-            id: e.id,
-            subject: e.subject,
-            intro: e.intro,
-            recipentName: e.recipentName,
-            company: e.companyName,
-            tone: e.Tone,
-            createdAt: e.createdAt,
-            emailType: e.emailType,
-            personalizationScore: e.personalizationScore,
-            websiteContextScore: e.websiteContextScore
-        }))
+        const formatted = emailData.map(e => {
+            const emailQuality = e.emailQuality
+            console.log("Quality", emailQuality)
+            return {
+                id: e.id,
+                subject: e.subject,
+                intro: e.intro,
+                recipentName: e.recipentName,
+                company: e.companyName,
+                tone: e.Tone,
+                createdAt: e.createdAt,
+                emailType: e.emailType,
+                personalizationScore: emailQuality?.personalizationScore || null,
+                websiteContextScore: emailQuality?.websiteContextScore || null
+            }
+        })
         console.log("Formatted", formatted)
         setEmails(formatted)
     }
@@ -117,7 +121,7 @@ const ActivityPage = () => {
 
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {filteredEmails.map((email) => (
-                        <article onClick={()=> handleClick(email.id)}
+                        <article onClick={() => handleClick(email.id)}
                             key={email.id}
                             className="cursor-pointer p-5 rounded-xl border border-gray-800
              bg-[#0E1726] hover:bg-[#142034] transition-all duration-200 
