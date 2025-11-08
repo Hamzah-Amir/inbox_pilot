@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import rs from 'text-readability';
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { getCampaign } from "@/actions/useractions";
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";

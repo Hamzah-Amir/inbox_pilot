@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 
 export async function POST(req) {
   const session = await getServerSession(authOptions)

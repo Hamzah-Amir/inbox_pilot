@@ -41,23 +41,23 @@ export async function POST(req) {
 
       console.log(`Webhook processed!`);
     }
-    // Upsert subscription
-    // await prisma.subscription.upsert({
-    //   where: { subscriptionId },
-    //   create: {
-    //     subscriptionId,
-    //     customerId: attributes.customer_id.toString(),
-    //     userId,
-    //     status: attributes.status,
-    //     renewsAt: attributes.renews_at ? new Date(attributes.renews_at) : null,
-    //     plan: attributes.variant_name,
-    //   },
-    //   update: {
-    //     status: attributes.status,
-    //     renewsAt: attributes.renews_at ? new Date(attributes.renews_at) : null,
-    //     plan: attributes.variant_name,
-    //   },
-    // });
+    Upsert subscription
+    await prisma.subscription.upsert({
+      where: { subscriptionId },
+      create: {
+        subscriptionId,
+        customerId: attributes.customer_id.toString(),
+        userId,
+        status: attributes.status,
+        renewsAt: attributes.renews_at ? new Date(attributes.renews_at) : null,
+        plan: attributes.variant_name,
+      },
+      update: {
+        status: attributes.status,
+        renewsAt: attributes.renews_at ? new Date(attributes.renews_at) : null,
+        plan: attributes.variant_name,
+      },
+    });
 
     // // Set email limit based on exact variant name
     return new Response("OK", { status: 200 });
