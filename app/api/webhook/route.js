@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
     const payload = JSON.stringify(req.body);
     const signature = req.headers['x-signature'];
 
@@ -10,6 +10,23 @@ export default function handler(req, res) {
     if (hash !== signature) {
         return res.status(401).send("Invalid Signature")
     }
+
+    await prisma.subscription.upsert({
+        where: { subscriptionId: event.data.id.toString() },
+        create: {
+            subscriptionId: event.data.id.toString(),
+            customerId: event.data.attributes.customer_id.toString(),
+            userId: user.id,
+            status: event.data.attributes.status,
+            renewsAt: new Date(event.data.attributes.renews_at),
+            plan: event.data.attributes.variant_name
+        },
+        update: {
+            status: event.data.attributes.status,
+            renewsAt: new Date(event.data.attributes.renews_at)
+        }
+    });
+
 
     const event = req.body.event;
     const data = req.body.data;
