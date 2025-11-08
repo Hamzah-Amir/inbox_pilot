@@ -50,7 +50,11 @@ model Email {
     companyName String
     Tone String?
     emailType  EmailType @default(TEMPLATE) // TEMPLATE | WEBSITE_PERSONALIZED | LINKEDIN_PERSONALIZED
-    output String @db.Text
+    subject String
+    intro String @db.Text
+    body String @db.Text
+    cta String @db.Text
+    closing String @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     replies Reply[]
