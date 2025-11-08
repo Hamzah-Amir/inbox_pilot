@@ -57,9 +57,6 @@ export async function POST(req) {
           emailLimit: emailLimit,
         },
       });
-      console.log("Sub ID", subscription.subscriptionId)
-      console.log( "CustomerID:", subscription.customerId)
-      console.log( "Plan:", body.data.attributes.product_name)
     }
 
     // // Set email limit based on exact variant name
