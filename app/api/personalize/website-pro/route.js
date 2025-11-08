@@ -39,14 +39,21 @@ export async function POST(req) {
         const url = domain.startsWith("http") ? domain : `https://${domain}`;
         let companyName = extractCompanyName(url)
 
-        const executablePath =chromium.executablePath;
+        // const executablePath = chromium.executablePath;
+        const isProd = process.env.NODE_ENV === "production";
 
-        const browser = await puppeteer.launch({
-            args: chromium.args,
-            defaultViewport: chromium.defaultViewport,
-            executablePath: executablePath,
-            headless: chromium.headless,
-        });
+        const browser = await (isProd
+            ? puppeteer.launch({
+                args: chromium.args,
+                defaultViewport: chromium.defaultViewport,
+                executablePath: chromium.executablePath,
+                headless: chromium.headless,
+            })
+            : puppeteer.launch({
+                headless: true,
+                executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+            })
+        );
 
 
         const page = await browser.newPage();
