@@ -16,8 +16,18 @@ export async function GET() {
 
   console.log("Emails", recentEmails)
 
-  const content = recentEmails.map(email => email.output);
+  const content = recentEmails.map(email => ({
+    subject: email.subject,
+    intro: email.intro,
+    body: email.body,
+    closing: email.closing
+  }));
   console.log(content);
 
-  return Response.json({content: content,recentEmails: recentEmails}, { status: 200 });
+ return new Response(
+  JSON.stringify({ content, recentEmails }),
+  { status: 200, headers: { "Content-Type": "application/json" } }
+);
+
+
 }
