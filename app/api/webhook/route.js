@@ -30,6 +30,14 @@ export async function POST(req) {
       
 
       console.log("LIMIT:", user.emailLimit)
+      // Update user's plan and email limit
+      const user = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          plan: body.data.attributes.product_name,
+          emailLimit: emailLimit,
+        },
+      });
 
       console.log(`Webhook processed!`);
       let customerId = body.data.attributes.customer_id?.toString()
@@ -48,18 +56,9 @@ export async function POST(req) {
           renewsAt: body.data.attributes.renews_at ? new Date(body.data.attributes.renews_at) : null,
         },
       });
-
-      // Update user's plan and email limit
-      const user = await prisma.user.update({
-        where: { id: userId },
-        data: {
-          plan: body.data.attributes.product_name,
-          emailLimit: emailLimit,
-        },
-      });
+      
     }
-
-    // // Set email limit based on exact variant name
+    
     return new Response("OK", { status: 200 });
   } catch (err) {
     console.error("Webhook error:", err);
