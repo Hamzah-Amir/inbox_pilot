@@ -91,7 +91,7 @@ const page = () => {
   const used = emailsGenerated ?? 0
   const max = limit ?? 0
 
-  if (plan == 'free') {
+  if (plan == 'TEMPLATE') {
 
     return <TemplateDashboard campaigns={campaign} emails={emailData} content={email} plan={plan} used={used} limit={limit} />
   }

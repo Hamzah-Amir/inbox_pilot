@@ -12,7 +12,7 @@ const WebsiteDashboard = ( { used, max, plan, campaign, emailsGenerated, email, 
                         <span className='text-[16px] text-gray-400'>Manage and track your AI-powered email campaigns</span>
                         {
                             used < max ? (
-                                <Link href='/dashboard/generate/template-personalization'>
+                                <Link href='/dashboard/generate/website-pro'>
                                     <button className='bg-blue-600 bottom-16 left-56 relative hover:bg-blue-700 text-white px-4 py-2 rounded-md float-right mt-8 mr-4'>
                                         Generate New Email
                                     </button>
