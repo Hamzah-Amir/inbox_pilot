@@ -58,7 +58,7 @@ export async function POST(req) {
       });
       console.log("Sub ID", subscription.subscriptionId)
       console.log( "CustomerID:", subscription.customerId)
-      console.log( "Plan:", subscription.Plan)
+      console.log( "Plan:", subscription.plan)
     }
 
     // // Set email limit based on exact variant name
