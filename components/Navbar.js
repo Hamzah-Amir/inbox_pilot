@@ -3,11 +3,25 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+import { getUser } from '@/actions/useractions'
 
 const Navbar = () => {
 
   const { data: session } = useSession();
+  const [generated, setGenerated] = useState(null)
 
+  const fetchUser = async () => {
+    const user = getUser(session.user.id)
+    const emailGenerated = user.emailsGenerated
+    setGenerated(emailGenerated)
+    return user
+  }
+
+  useEffect(() => {
+    if (!session) return
+    fetchUser()
+  }, [session])
 
   if (!session) {
 
@@ -39,10 +53,10 @@ const Navbar = () => {
       </header>
     )
   }
-  if(session && session.user) {
+  if (session && session.user) {
     return (
       <header className='fixed top-0 left-0 right-0 z-50 bg-[#071021] border-b border-gray-700 text-white'>
-        <nav className='flex px-10 justify-between items-center p-4'>
+        <nav className='flex px-10 justify-between items-center p-6'>
           <div className='flex justify-center items-center gap-5'>
             <div className='img'><Image src='/fav.png' height='40' width='40' alt='Inbox Pilot Logo'></Image></div>
             <div className='logo font-bold text-2xl'>Inbox Pilot</div>
@@ -60,15 +74,12 @@ const Navbar = () => {
                 <rect x="2" y="6" width="20" height="12" rx="2" ry="2" strokeWidth="1.5" />
                 <path d="M8 10h.01" strokeWidth="1.5" />
               </svg>
-              <span>{session?.user?.credits ?? '0'} credits</span>
+              <span>{generated ?? '0'} Emails Generated</span>
             </div>
 
-            <Link href="/dashboard/generate/template-personalization">
-              <button className='bg-cyan-500 hover:bg-cyan-400 text-black px-4 py-2 rounded-md flex items-center gap-2'>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M2 11a1 1 0 011-1h6V4a1 1 0 112 0v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H3a1 1 0 01-1-1z" />
-                </svg>
-                Generate New Email
+            <Link href="/dashboard">
+              <button className='bg-cyan-500 hover:bg-cyan-400 text-black px-8 py-2  rounded-md flex items-center gap-2'>
+                Dashboard
               </button>
             </Link>
 
