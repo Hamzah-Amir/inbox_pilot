@@ -1,10 +1,12 @@
+export const runtime = "nodejs"
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import rs from 'text-readability';
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { getCampaign } from "@/actions/useractions";
-import puppeteer from "puppeteer";
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
 import * as cheerio from 'cheerio'
 import { prisma } from "@/lib/prisma";
 import { parse } from "tldts";
@@ -37,7 +39,16 @@ export async function POST(req) {
         const url = domain.startsWith("http") ? domain : `https://${domain}`;
         let companyName = extractCompanyName(url)
 
-        const browser = await puppeteer.launch({ headless: true });
+        const executablePath =chromium.executablePath;
+
+        const browser = await puppeteer.launch({
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: executablePath,
+            headless: chromium.headless,
+        });
+
+
         const page = await browser.newPage();
         console.log("Opened Browser!")
         await page.goto(url, { waitUntil: "networkidle2", timeout: 360000 });
@@ -110,7 +121,11 @@ export async function POST(req) {
                 companyName: companyName,
                 recipentName: recipientName,
                 emailType: "WEBSITE_PERSONALIZED",
-                output: "",
+                subject: "",
+                intro: "",
+                body: "",
+                cta: "",
+                closing: ""
             }
         })
 
@@ -151,10 +166,20 @@ export async function POST(req) {
 5. Show a clear angle of relevance to their work (e.g., efficiency, product velocity, workflow clarity, collaboration speed).
 6. End with **one simple question** about interest in continuing the conversation.
 7. Do NOT mention: scraping, websites, browsing, AI, algorithms, personalization processes, or data extraction.
-8. Do NOT add a subject line.
 
-### Output Format
-Return only the email body. No headings. No commentary.
+Return a valid JSON object with the following fields:
+
+{
+  "subject": "",
+  "intro": "",
+  "body": "",
+  "cta": "",
+  "closing": ""
+}
+
+- Do not include Markdown.
+- Do not include quotes outside the JSON.
+- Do not include commentary.
 
 ---
 
@@ -164,28 +189,35 @@ Write the email now.`
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         // Start streaming content
-        const result = await model.generateContentStream(prompt);
+        const result = await model.generateContent(prompt);
+        const text = result.response.text();
+        console.log("Result", text)
 
-        let fullEmail = '';
-        // Create a ReadableStream for the frontend
-        const readableStream = new ReadableStream({
-            async start(controller) {
-                for await (const chunk of result.stream) {
-                    const chunkText = chunk.text();
-                    fullEmail += chunkText
-                    controller.enqueue(new TextEncoder().encode(chunkText));
-                }
-                await prisma.email.update({
-                    where: {
-                        id: email.id
-                    },
-                    data: {
-                        output: fullEmail
-                    }
-                })
-                controller.close();
-            },
+
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error("Model did not return JSON output");
+        const emailJson = JSON.parse(jsonMatch[0]);
+        console.log("EMAIL", emailJson)
+
+        await prisma.email.update({
+            where: { id: email.id },
+            data: {
+                subject: emailJson.subject || "",
+                intro: emailJson.intro || "",
+                body: emailJson.body || "",
+                cta: emailJson.cta || '',
+                closing: emailJson.closing || ""
+            }
         });
+
+        const fullEmail = [
+            emailJson.intro || "",
+            emailJson.body || "",
+            emailJson.cta || "",
+            emailJson.closing || ""
+        ].join(" ").replace(/\s+/g, " ").trim();
+
+
 
         function countOccurrences(text, term) {
             if (!text || !term) return 0;
@@ -197,21 +229,23 @@ Write the email now.`
             return matches ? matches.length : 0;
         }
 
-        const extractKeywords = (text) => {
-            if (!text) return [];
+        const STOP_WORDS = ["the", "and", "with", "from", "that", "this", "they", "their"];
+
+        function extractKeywords(text) {
+            if (!text) return {};
 
             return text
                 .toLowerCase()
                 .replace(/[^a-z0-9\s]/gi, " ")
                 .split(/\s+/)
-                .filter(word => word.length > 3 && !STOP_WORDS.includes(word))
+                .filter(word => word.length > 4 && !STOP_WORDS.includes(word))
                 .reduce((acc, word) => {
                     acc[word] = (acc[word] || 0) + 1;
                     return acc;
                 }, {});
         }
 
-        function getTopKeywords(freqMap, limit = 5) {
+        function getTopKeywords(freqMap, limit = 3) {
             return Object.entries(freqMap)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, limit)
@@ -220,20 +254,24 @@ Write the email now.`
 
         function detectTone(text) {
             const formality = /(?:we are pleased|furthermore|our mission)/i.test(text) ? "formal" : "casual";
-            const avgSentenceLength = text.split(/[.!?]/).map(s => s.trim().split(/\s+/).length).reduce((a, b) => a + b) / text.split(/[.!?]/).length;
+            const sentenceLengths = text.split(/[.!?]/).map(s => s.trim().split(/\s+/).length);
+            const avgSentenceLength = sentenceLengths.reduce((a, b) => a + b) / sentenceLengths.length;
             const pronounStyle = text.includes("you") ? "personal" : "corporate";
 
             return { formality, avgSentenceLength, pronounStyle };
         }
 
-        const personalizationScore = countOccurrences(fullEmail, companyName)
+        // SCORE CALCULATIONS
+        const personalizationScore = countOccurrences(fullEmail, companyName);
         const freq = extractKeywords(pageText);
         const keywords = getTopKeywords(freq, 3);
-        const usedKeywords = keywords.filter(k => fullEmail.includes(k))
-        const websiteContextScore = usedKeywords.length
-        const readabilityGrade = rs.fleschKincaidGrade(fullEmail)
-        const siteTone = detectTone(pageText.toLowerCase())
-        const emailTone = detectTone(fullEmail.toLowerCase())
+        const usedKeywords = keywords.filter(k => fullEmail.includes(k));
+        const websiteContextScore = usedKeywords.length;
+        const readabilityGrade = rs.fleschKincaidGrade(fullEmail);
+
+        const siteTone = detectTone(pageText.toLowerCase());
+        const emailTone = detectTone(fullEmail.toLowerCase());
+
         const toneMatched =
             siteTone.formality === emailTone.formality &&
             Math.abs(siteTone.avgSentenceLength - emailTone.avgSentenceLength) < 5 &&
@@ -242,16 +280,13 @@ Write the email now.`
         await prisma.emailQuality.create({
             data: {
                 emailId: email.id,
-                personalizationScore: personalizationScore,
-                websiteContextScore: websiteContextScore,
-                readabilityGrade: readabilityGrade,
-                toneMatched: toneMatched
+                personalizationScore,
+                websiteContextScore,
+                readabilityGrade,
+                toneMatched
             }
-        })
-
-        return new NextResponse(readableStream, {
-            headers: { "Content-Type": "text/plain" },
         });
+        return new Response(JSON.stringify(emailJson), { status: 200 });
 
     } catch (error) {
         console.log("Error while streaming", error.message)
