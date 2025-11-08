@@ -1,4 +1,3 @@
-
 import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 
@@ -40,24 +39,25 @@ export async function POST(req) {
       console.log("LIMIT:", user.emailLimit)
 
       console.log(`Webhook processed!`);
+      // Upsert subscription
+      const subscription = await prisma.subscription.upsert({
+        where: { userId: userId },
+        create: {
+          subscriptionId: body.data.id,
+          customerId: body.data.attributes.customer_id.toString(),
+          userId: userId,
+          status: body.data.attributes.status_formatted,
+          renewsAt: body.data.attributes.renews_at ? new Date(body.data.attributes.renews_at) : null,
+        },
+        update: {
+          status: body.data.attributes.status,
+          renewsAt: body.data.attributes.renews_at ? new Date(body.data.attributes.renews_at) : null,
+        },
+      });
+      console.log("Sub ID", subscription.subscriptionId)
+      console.log("Status", subscription.status)
+      console.log( "CustomerID:", subscription.customerId)
     }
-    Upsert subscription
-    await prisma.subscription.upsert({
-      where: { subscriptionId },
-      create: {
-        subscriptionId,
-        customerId: attributes.customer_id.toString(),
-        userId,
-        status: attributes.status,
-        renewsAt: attributes.renews_at ? new Date(attributes.renews_at) : null,
-        plan: attributes.variant_name,
-      },
-      update: {
-        status: attributes.status,
-        renewsAt: attributes.renews_at ? new Date(attributes.renews_at) : null,
-        plan: attributes.variant_name,
-      },
-    });
 
     // // Set email limit based on exact variant name
     return new Response("OK", { status: 200 });
