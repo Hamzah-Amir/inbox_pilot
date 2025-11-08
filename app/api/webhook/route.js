@@ -46,17 +46,19 @@ export async function POST(req) {
           subscriptionId: body.data.id,
           customerId: body.data.attributes.customer_id.toString(),
           userId: userId,
+          plan: body.data.attributes.product_name,
           status: body.data.attributes.status_formatted,
           renewsAt: body.data.attributes.renews_at ? new Date(body.data.attributes.renews_at) : null,
         },
         update: {
           status: body.data.attributes.status,
           renewsAt: body.data.attributes.renews_at ? new Date(body.data.attributes.renews_at) : null,
+          plan: body.data.attributes.product_name
         },
       });
       console.log("Sub ID", subscription.subscriptionId)
-      console.log("Status", subscription.status)
       console.log( "CustomerID:", subscription.customerId)
+      console.log( "Plan:", subscription.Plan)
     }
 
     // // Set email limit based on exact variant name
