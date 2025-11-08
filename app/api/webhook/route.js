@@ -27,14 +27,7 @@ export async function POST(req) {
       console.log("User Id", userId)
       const emailLimit = body.data.attributes.product_name === "WEBSITE_PERSONALIZATION" ? 200 : 50;
 
-      // Update user's plan and email limit
-      const user = await prisma.user.update({
-        where: { id: userId },
-        data: {
-          plan: body.data.attributes.product_name,
-          emailLimit: emailLimit,
-        },
-      });
+      
 
       console.log("LIMIT:", user.emailLimit)
 
@@ -53,6 +46,15 @@ export async function POST(req) {
         update: {
           status: body.data.attributes.status,
           renewsAt: body.data.attributes.renews_at ? new Date(body.data.attributes.renews_at) : null,
+        },
+      });
+
+      // Update user's plan and email limit
+      const user = await prisma.user.update({
+        where: { id: userId },
+        data: {
+          plan: body.data.attributes.product_name,
+          emailLimit: emailLimit,
         },
       });
       console.log("Sub ID", subscription.subscriptionId)
