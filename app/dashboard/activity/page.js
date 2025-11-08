@@ -11,25 +11,29 @@ const ActivityPage = () => {
 
     const { data: session, status } = useSession()
     const [emails, setEmails] = useState([])
+    const [search, setSearch] = useState("")
+    const [sortBy, setSortBy] = useState("newest")
+    const [toneFilter, setToneFilter] = useState("")
     const [emailType, setEmailType] = useState('')
     const router = useRouter()
 
     const getEmail = async () => {
         const emailData = await getEmailsByUserId(session.user.id)
-        // console.log(emailData)
 
-        const formatted = emailData.map(e => (console.log("Company Name", e.companyName), {
+        const formatted = emailData.map(e => ({
 
             id: e.id,
-            output: e.output,
+            subject: e.subject,
+            intro: e.intro,
             recipentName: e.recipentName,
             company: e.companyName,
             tone: e.Tone,
+            createdAt: e.createdAt,
             emailType: e.emailType,
             personalizationScore: e.personalizationScore,
             websiteContextScore: e.websiteContextScore
         }))
-        // console.log("Formatted", formatted)
+        console.log("Formatted", formatted)
         setEmails(formatted)
     }
 
@@ -48,6 +52,17 @@ const ActivityPage = () => {
             default: return 'bg-gray-700 text-gray-200'
         }
     }
+
+    const filteredEmails = emails.filter(email => {
+        const content = email.output || ""
+        const matchesSearch =
+            email.recipentName.toLowerCase().includes(search.toLowerCase()) ||
+            content.toLowerCase().includes(search.toLowerCase())
+
+        const matchesTone = toneFilter ? email.tone === toneFilter : true
+
+        return matchesSearch && matchesTone
+    })
 
     const handleClick = (id) => {
         console.log('Email clicked:', id)
@@ -74,54 +89,72 @@ const ActivityPage = () => {
 
                 <div className='mt-6 flex items-center gap-4'>
                     <div className='flex-1'>
-                        <input placeholder='Search by recipient or company...'
+                        <input placeholder='Search emails...'
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
                             className='w-full bg-transparent border border-gray-700 rounded-lg p-3 placeholder:text-gray-500 outline-none'
                         />
                     </div>
                     <div>
-                        <select className='bg-transparent border border-gray-700 rounded-lg p-3 px-4 text-sm'>
-                            <option>Filter Tone</option>
+                        <select className='bg-transparent border border-gray-700 rounded-lg p-3 px-4 text-sm'
+                            value={toneFilter}
+                            onChange={(e) => setToneFilter(e.target.value)}
+                        >
+                            <option value="">All</option>
+                            <option value="casual">Casual</option>
+                            <option value="formal">Formal</option>
+                            <option value="friendly">Friendly</option>
                         </select>
                     </div>
-                    <div>
-                        <select className='bg-transparent border border-gray-700 rounded-lg p-3 px-4 text-sm'>
-                            <option>Date Range</option>
-                        </select>
+
+                    <div className="grid grid-cols-1 gap-4">
+                        {filteredEmails.length === 0 && (
+                            <p className="text-gray-400 text-sm">No emails found.</p>
+                        )}
+
                     </div>
                 </div>
 
-                <div className='mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-                    {emails && emails.map((email) => {
-                        const { subject, intro, body, isTemplate } = parseEmailOutput(email)
-                        console.log("EMAIL", email)
+                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {filteredEmails.map((email) => (
+                        <article onClick={()=> handleClick(email.id)}
+                            key={email.id}
+                            className="cursor-pointer p-5 rounded-xl border border-gray-800
+             bg-[#0E1726] hover:bg-[#142034] transition-all duration-200 
+             shadow hover:shadow-lg flex flex-col gap-3"
+                        >
+                            {/* Company Name */}
+                            <h3 className="text-white text-lg font-semibold line-clamp-1">
+                                {email.company || "Unknown Company"}
+                            </h3>
 
-                        return (
-                            <article
-                                key={email.id}
-                                onClick={() => handleClick(email.id)}
-                                className="cursor-pointer p-4 rounded-lg border border-gray-700 bg-[#0F1A2C] hover:bg-[#16253C] transition-colors duration-200 shadow-sm flex flex-col gap-2"
-                            >
-                                {/* Email Subject */}
-                                <h3 className="text-white text-lg font-semibold line-clamp-1">
-                                    {isTemplate ? subject : body.slice(0, 50) + "..."}
-                                </h3>
+                            {/* Subject */}
+                            <p className="text-gray-300 text-sm line-clamp-1">
+                                {email.subject}
+                            </p>
 
-                                {/* Email Snippet */}
-                                <p className="text-gray-400 text-sm line-clamp-2">
-                                    {isTemplate ? intro.slice(0, 60) + "..." : body.slice(0, 60) + "..."}
-                                </p>
-                                <div className="mt-2 p-2 bg-[#0B1220] rounded-md border border-gray-800">
-                                    <h4 className="text-white font-medium text-sm mb-1">Metrics</h4>
-                                    <div className="text-gray-300 text-xs flex flex-col gap-1">
-                                        <span>Personalization: {email.personalizationScore ?? 0}</span>
-                                        <span>Website Context: {email.websiteContextScore ?? 0}</span>
-                                    </div>
+                            {/* Preview of the email body */}
+                            <p className="text-gray-500 text-xs line-clamp-2">
+                                {email.intro || email.body}
+                            </p>
+
+                            <div className="flex items-center justify-between pt-2">
+                                {/* Email Type Badge */}
+                                <span className="text-[10px] px-2 py-1 rounded-md bg-blue-900/40 text-blue-300 uppercase font-medium tracking-wide">
+                                    {email.emailType.replace("_", " ")}
+                                </span>
+
+                                {/* Quality Metrics */}
+                                <div className="text-xs text-gray-500 flex gap-3">
+                                    <span>🎯 P: {email.personalizationScore ?? 0}</span>
+                                    <span>🌐 C: {email.websiteContextScore ?? 0}</span>
                                 </div>
-                            </article>
-                        );
-                    })}
+                            </div>
+                        </article>
 
+                    ))}
                 </div>
+
             </section>
         </main>
     )
