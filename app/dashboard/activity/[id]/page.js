@@ -1,5 +1,6 @@
 import React from 'react'
 import { fetchEmailQuality, fetchEmailById } from '@/actions/useractions'
+import { prisma } from '@/lib/prisma'
 import Sidebar from '@/components/Sidebar'
 
 const ActivityEmailPage = async ({ params }) => {
