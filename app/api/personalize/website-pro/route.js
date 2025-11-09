@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 import rs from 'text-readability';
 import { authOptions } from "@/lib/authOptions";
 import { getCampaign } from "@/actions/useractions";
-import chromium from "@sparticuz/chromium";
 import * as cheerio from 'cheerio'
 import { prisma } from "@/lib/prisma";
 import { parse } from "tldts";

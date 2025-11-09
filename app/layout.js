@@ -1,23 +1,10 @@
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
-import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import SessionWrapper from "@/components/SessionWrapper";
 
-// Use the recommended naming format (no underscores)
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap", // ensures font loading is smooth
-});
-
-const robotoMono = Roboto_Mono({
-  variable: "--font-roboto-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata = {
   title: "Inbox Pilot - Cold emails personalizer",
@@ -27,7 +14,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${robotoMono.variable}`}>
+    <html lang="en">
       <body>
         <SessionWrapper>
           <div className="text-white min-h-screen bg-[#071021] pt-18">
