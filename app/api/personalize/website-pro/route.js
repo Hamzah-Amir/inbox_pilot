@@ -50,6 +50,7 @@ export async function POST(req) {
         launchOptions = {
             ...launchOptions,
             args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
             executablePath: await chromium.executablePath(),
         };
 
