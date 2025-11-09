@@ -45,17 +45,14 @@ export async function POST(req) {
 
         // Dynamically import Puppeteer depending on environment
         let puppeteer;
-        if (isVercel) {
-            puppeteer = (await import("puppeteer-core")).default;
-            launchOptions = {
-                ...launchOptions,
-                args: chromium.args,
-                executablePath: await chromium.executablePath(),
-            };
-        } else {
-            const puppeteerLocal = await import("puppeteer");
-            puppeteer = puppeteerLocal.default;
-        }
+
+        puppeteer = (await import("puppeteer-core")).default;
+        launchOptions = {
+            ...launchOptions,
+            args: chromium.args,
+            executablePath: await chromium.executablePath(),
+        };
+
 
 
         const browser = await puppeteer.launch(launchOptions);
