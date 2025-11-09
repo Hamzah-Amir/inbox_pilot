@@ -1,4 +1,4 @@
-export const runtime = "nodejs"
+export const runtime = "nodejs";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
