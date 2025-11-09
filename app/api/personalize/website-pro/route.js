@@ -38,6 +38,8 @@ export async function POST(req) {
 
         const url = domain.startsWith("http") ? domain : `https://${domain}`;
         let companyName = extractCompanyName(url)
+        const path = await chromium.executablePath();
+        console.log("Chromium executable path:", path);
 
         const browser = await puppeteer.launch({
             args: chromium.args,
