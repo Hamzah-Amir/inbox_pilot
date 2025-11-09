@@ -6,7 +6,6 @@ import rs from 'text-readability';
 import { authOptions } from "@/lib/authOptions";
 import { getCampaign } from "@/actions/useractions";
 import chromium from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
 import * as cheerio from 'cheerio'
 import { prisma } from "@/lib/prisma";
 import { parse } from "tldts";
@@ -38,16 +37,28 @@ export async function POST(req) {
 
         const url = domain.startsWith("http") ? domain : `https://${domain}`;
         let companyName = extractCompanyName(url)
-        const path = await chromium.executablePath();
-        console.log("Chromium executable path:", path);
 
-        const browser = await puppeteer.launch({
-            args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox'],
-            defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath(),
-            headless: chromium.headless,
-            ignoreHTTPSErrors: true,
-        });
+        const isVercel = !!process.env.VERCEL_ENV;
+        let launchOptions = {
+            headless: true,
+        };
+
+        // Dynamically import Puppeteer depending on environment
+        let puppeteer;
+        if (isVercel) {
+            puppeteer = (await import("puppeteer-core")).default;
+            launchOptions = {
+                ...launchOptions,
+                args: chromium.args,
+                executablePath: await chromium.executablePath(),
+            };
+        } else {
+            const puppeteerLocal = await import("puppeteer");
+            puppeteer = puppeteerLocal.default;
+        }
+
+
+        const browser = await puppeteer.launch(launchOptions);
 
 
         const page = await browser.newPage();
