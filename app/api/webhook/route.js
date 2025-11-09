@@ -24,12 +24,10 @@ export async function POST(req) {
 
     if (eventType === 'subscription_created') {
       const userId = body.meta.custom_data.user_id
-      console.log("User Id", userId)
       const emailLimit = body.data.attributes.product_name === "WEBSITE_PERSONALIZATION" ? 200 : 50;
 
       
 
-      console.log("LIMIT:", user.emailLimit)
       // Update user's plan and email limit
       const user = await prisma.user.update({
         where: { id: userId },
@@ -39,14 +37,11 @@ export async function POST(req) {
         },
       });
 
-      console.log(`Webhook processed!`);
-      let customerId = body.data.attributes.customer_id?.toString()
       // Upsert subscription
       const subscription = await prisma.subscription.upsert({
         where: { userId: userId },
         create: {
           subscriptionId: body.data.id,
-          customerId: customerId,
           userId: userId,
           status: body.data.attributes.status_formatted,
           renewsAt: body.data.attributes.renews_at ? new Date(body.data.attributes.renews_at) : null,
@@ -59,6 +54,7 @@ export async function POST(req) {
       
     }
     
+    console.log(`Webhook processed!`);
     return new Response("OK", { status: 200 });
   } catch (err) {
     console.error("Webhook error:", err);
