@@ -9,6 +9,7 @@ import chromium from "@sparticuz/chromium";
 import * as cheerio from 'cheerio'
 import { prisma } from "@/lib/prisma";
 import { parse } from "tldts";
+import axios from "axios";
 
 function extractCompanyName(domain) {
     const url = domain.startsWith("http") ? domain : `https://${domain}`;
@@ -38,65 +39,20 @@ export async function POST(req) {
         const url = domain.startsWith("http") ? domain : `https://${domain}`;
         let companyName = extractCompanyName(url)
 
-        const isVercel = !!process.env.VERCEL_ENV;
-        let launchOptions = {
-            headless: true,
-        };
-
-        // Dynamically import Puppeteer depending on environment
-        let puppeteer;
-
-        puppeteer = (await import("puppeteer-core")).default;
-        launchOptions = {
-            ...launchOptions,
-            args: chromium.args,
-            defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath(),
-        };
-
-
-
-        const browser = await puppeteer.launch(launchOptions);
-
-
-        const page = await browser.newPage();
-        console.log("Opened Browser!")
-        await page.goto(url, { waitUntil: "networkidle2", timeout: 360000 });
-        console.log("Page Opened!")
-        const html = await page.content()
+        const { data: html } = await axios.get(url, { timeout: 30000 })
         const $ = cheerio.load(html)
-        let headline =
-            $("main h1").first().text().trim() ||
-            $("section h1").first().text().trim() ||
-            $("header h1").first().text().trim() ||
-            $("h1").first().text().trim();
-        if (!headline) {
-            headline =
-                $("main h2").first().text().trim() ||
-                $("section h2").first().text().trim() ||
-                $("h2").first().text().trim();
-        }
-        let subHeadline =
-            $("main h2").eq(1).text().trim() ||
-            $("section h2").eq(1).text().trim() ||
-            $("h2").eq(1).text().trim();
-        if (!subHeadline) {
-            subHeadline = $(headline).parent().find("p").first().text().trim();
-        }
-        let valueProps = $("ul li")
-            .map((_, el) => $(el).text().trim())
-            .get()
-            .filter(text => text.length > 0)
-            .slice(0, 3);
-        if (valueProps.length === 0) {
-            valueProps = $("strong")
-                .map((_, el) => $(el).text().trim())
-                .get()
-                .slice(0, 3);
-        }
-        let cta =
-            $("a[href*='contact'], a[href*='demo'], button").first().text().trim() ||
-            $("a, button").first().text().trim();
+
+        let headline = $("main h1, section h1, header h1, h1").first().text().trim();
+        if (!headline) headline = $("main h2, section h2, h2").first().text().trim();
+
+        let subHeadline = $("main h2, section h2, h2").eq(1).text().trim();
+        if (!subHeadline) subHeadline = $(headline).parent().find("p").first().text().trim();
+
+
+        let valueProps = $("ul li").map((_, el) => $(el).text().trim()).get().filter(Boolean).slice(0, 3);
+        if (!valueProps.length) valueProps = $("strong").map((_, el) => $(el).text().trim()).get().slice(0, 3);
+
+        let cta = $("a[href*='contact'], a[href*='demo'], button").first().text().trim() || $("a, button").first().text().trim();
 
         function clean(str) {
             return str?.replace(/\s+/g, " ").trim() || "";
