@@ -22,7 +22,7 @@ const ActivityPage = () => {
         console.log("email data", emailData)
 
         const formatted = emailData.map(e => {
-            const emailQuality = e.emailQuality
+            const emailQuality = e.emailQuality[0]
             console.log("Quality", emailQuality)
             return {
                 id: e.id,
