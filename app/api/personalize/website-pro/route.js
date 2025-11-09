@@ -76,8 +76,6 @@ export async function POST(req) {
         pageText = pageText.slice(0, 1200); // Limiting content to 1.2k characters
         console.log(pageText)
 
-        await browser.close();
-
         const email = await prisma.email.create({
             data: {
                 userId: session.user.id,
