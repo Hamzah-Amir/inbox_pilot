@@ -11,6 +11,7 @@ import { set } from 'react-hook-form'
 import WebsiteDashboard from '@/components/WebsiteDashboard'
 import TemplateDashboard from '@/components/TemplateDashboard'
 import PricingPage from '../pricing/page'
+import { useRouter } from 'next/navigation'
 
 const page = () => {
 
@@ -20,7 +21,8 @@ const page = () => {
   const [plan, setPlan] = useState(null)
   const [emailsGenerated, setEmailsGenerated] = useState(null)
   const [limit, setLimit] = useState(null)
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+  const router = useRouter()
 
   const fetchEmailGenerated = async () => {
     const user = await getUser(session.user.email)
@@ -80,6 +82,10 @@ const page = () => {
   }
 
   useEffect(() => {
+    if(status === "unauthenticated"){
+      router.push("/login")
+    }
+    
     if (session) {
       fetchUser()
       fetchCampaignData()
