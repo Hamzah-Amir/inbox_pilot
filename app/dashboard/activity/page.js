@@ -70,6 +70,7 @@ const ActivityPage = () => {
 
     const handleClick = (id) => {
         console.log('Email clicked:', id)
+        console.log(`Pushing to URL /dashboard/activity/${id}`)
         router.push(`/dashboard/activity/${id}`)
     }
 
