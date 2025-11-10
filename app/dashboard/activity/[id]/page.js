@@ -35,12 +35,7 @@ const ActivityEmailPage = async ({ params }) => {
     }
 
     const campaignId = email.campaignId
-    const emailWithCampaign = await prisma.email.findUnique({
-        where: { id: emailId },      // your email ID
-        include: {
-            campaign: true,            // include the related campaign
-        },
-    });
+    const emailWithCampaign = await fetchEmailById(emailId)
 
     const campaign = emailWithCampaign.campaign
 
