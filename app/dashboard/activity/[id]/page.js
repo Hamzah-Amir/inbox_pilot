@@ -16,7 +16,7 @@ const ActivityEmailPage = ({ params }) => {
     const fetchEmail = async () => {
         const email = await fetchEmailById(emailId)
         const emailQuality = await fetchEmailQuality()
-        console.log(email)
+        console.log("Email",email)
         setEmail(email)
         setEmailQuality(emailQuality)
         return email, emailQuality
@@ -45,8 +45,8 @@ const ActivityEmailPage = ({ params }) => {
 
     }, [session])
 
-    
-    
+
+
     subject = email.subject;
     intro = email.intro;
     body = email.body;
@@ -94,19 +94,13 @@ const ActivityEmailPage = ({ params }) => {
                             </svg>
                         </div>
                         <div className='border-b border-gray-600'></div>
-                        {isTemplate}
+
                         <div className='mt-12'>
-                            {isTemplate && (
-                                <p>{intro}</p>
-                            )
-                            }
+                            <p>{intro}</p>
                             <p>{body}</p>
-                            {isTemplate && (
-                                <p>{cta}</p>
-                            )}
-                            {isTemplate && (
-                                <p>{closing}</p>
-                            )}
+                            <p>{cta}</p>
+                            <p>{closing}</p>
+
                         </div>
                     </div>
                 </section>
