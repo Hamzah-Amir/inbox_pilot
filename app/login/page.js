@@ -3,8 +3,21 @@
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function LoginPage() {
+    const { data: session, status } = useSession()
+    const router = useRouter()
+
+    useEffect(() => {
+      if(status === 'authenticated') {
+        router.push('/dashboard')
+      }
+
+    }, [session, status])
+    
     return (
         <main className="min-h-screen bg-[#071021] flex items-center justify-center">
             <div className="w-full max-w-md mx-auto px-6 py-20 text-center">
