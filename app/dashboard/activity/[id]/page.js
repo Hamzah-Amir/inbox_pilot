@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { fetchEmailQuality, fetchEmailById } from '@/actions/useractions'
 import { prisma } from '@/lib/prisma'
