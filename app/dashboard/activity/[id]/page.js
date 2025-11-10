@@ -16,7 +16,7 @@ const ActivityEmailPage = ({ params }) => {
     const fetchEmail = async () => {
         const email = await fetchEmailById(emailId)
         const emailQuality = await fetchEmailQuality()
-        console.log("Email",email)
+        console.log("Email", email)
         setEmail(email)
         setEmailQuality(emailQuality)
         return email, emailQuality
@@ -55,6 +55,7 @@ const ActivityEmailPage = ({ params }) => {
     console.log("Subject", subject)
     console.log("intro", intro)
     console.log("CTA", cta)
+    console.log(email)
     if (!email) {
         return (
             <div className='flex justify-center items-center h-screen'>
@@ -83,10 +84,9 @@ const ActivityEmailPage = ({ params }) => {
                         </div>
                         <div className='border-b border-gray-600'></div>
                         <div className='flex items-center justify-between h-24'>
-                            <div>{isTemplate && (
+                            <div>
                                 <p className='hover:underline hover:decoration-cyan-500 hover:decoration-2'>{subject}</p>
-                            )
-                            }
+
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
