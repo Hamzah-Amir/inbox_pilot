@@ -27,18 +27,6 @@ const ActivityEmailPage = ({ params }) => {
     let cta;
     let closing;
 
-    const isTemplate = email.emailType === "TEMPLATE"
-    if (isTemplate) {
-        const parsed = JSON.parse(email.output)
-        subject = parsed.subject
-        intro = parsed.intro
-        body = parsed.body
-        closing = parsed.closing
-    } else {
-        body = email.output || ""
-        console.log("Body web", body)
-    }
-
     if (!email) {
         return (
             <div>Email not found</div>
