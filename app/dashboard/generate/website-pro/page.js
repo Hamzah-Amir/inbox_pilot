@@ -12,7 +12,7 @@ const WebsiteProPersonalization = () => {
 
   const router = useRouter()
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [campaigns, setCampaigns] = useState([])
   const [error, setError] = useState("");
   const [emailType, setEmailType] = useState()
@@ -24,6 +24,13 @@ const WebsiteProPersonalization = () => {
     closing: ""
   });
   const [loading, setloading] = useState(false)
+
+  useEffect(() => {
+    if(status === 'unauthenticated') {
+      router.push("/login")
+    }
+  }, [status])
+  
 
   const getCampaignData = async () => {
     const campaignData = await getCampaign(session.user.id)
