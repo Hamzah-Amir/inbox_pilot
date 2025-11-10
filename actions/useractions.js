@@ -49,8 +49,10 @@ export async function fetchEmailById(emailId) {
         where: {
             id: emailId
         },
+
         include: {
-            emailQuality: true
+            emailQuality: true,
+            campaign: true,
         }
     })
 
