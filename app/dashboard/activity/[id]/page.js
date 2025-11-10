@@ -16,6 +16,7 @@ const ActivityEmailPage = ({ params }) => {
     const fetchEmail = async () => {
         const email = await fetchEmailById(emailId)
         const emailQuality = await fetchEmailQuality()
+        console.log(email)
         setEmail(email)
         setEmailQuality(emailQuality)
         return email, emailQuality
@@ -27,13 +28,6 @@ const ActivityEmailPage = ({ params }) => {
     let cta;
     let closing;
 
-    if (!email) {
-        return (
-            <div className='flex justify-center items-center h-screen'>
-                <div className='h-10 w-10 border-4 border-red-600 border-t-transparent animate-spin rounded-full'></div>
-            </div>
-        )
-    }
     const fetchCampaign = async () => {
         const campaignId = email.campaignId
         const emailWithCampaign = await fetchEmailById(emailId)
@@ -51,8 +45,8 @@ const ActivityEmailPage = ({ params }) => {
 
     }, [session])
 
-
-
+    
+    
     subject = email.subject;
     intro = email.intro;
     body = email.body;
@@ -61,6 +55,13 @@ const ActivityEmailPage = ({ params }) => {
     console.log("Subject", subject)
     console.log("intro", intro)
     console.log("CTA", cta)
+    if (!email) {
+        return (
+            <div className='flex justify-center items-center h-screen'>
+                <div className='h-10 w-10 border-4 border-red-600 border-t-transparent animate-spin rounded-full'></div>
+            </div>
+        )
+    }
     return (
         <>
             <main className='mx-[17vw] min-h-screen'>
