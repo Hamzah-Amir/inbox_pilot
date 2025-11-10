@@ -38,12 +38,12 @@ const ActivityEmailPage = ({ params }) => {
 
 
     useEffect(() => {
-        if (session) {
+        if (status === 'authenticated') {
             fetchEmail()
             fetchCampaign()
         }
 
-    }, [session])
+    }, [status])
 
 
 
