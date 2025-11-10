@@ -1,19 +1,30 @@
 'use client'
 import React from 'react'
 import { fetchEmailQuality, fetchEmailById } from '@/actions/useractions'
-import { prisma } from '@/lib/prisma'
+import { useEffect, useState } from 'react'
 import Sidebar from '@/components/Sidebar'
+import { useSession } from 'next-auth/react'
 
-const ActivityEmailPage = async ({ params }) => {
+const ActivityEmailPage = ({ params }) => {
 
-    const emailId = await params.id
+    const emailId = params.id
+    const { data: session, status } = useSession()
+    const [email, setEmail] = useState()
+    const [emailQuality, setEmailQuality] = useState()
+    const [campaign, setCampaign] = useState()
 
-    const email = await fetchEmailById(emailId)
-    const emailQuality = await fetchEmailQuality()
+    const fetchEmail = async () => {
+        const email = await fetchEmailById(emailId)
+        const emailQuality = await fetchEmailQuality()
+        setEmail(email)
+        setEmailQuality(emailQuality)
+        return email, emailQuality
+    }
 
     let subject;
     let intro;
     let body;
+    let cta;
     let closing;
 
     const isTemplate = email.emailType === "TEMPLATE"
@@ -33,15 +44,33 @@ const ActivityEmailPage = async ({ params }) => {
             <div>Email not found</div>
         )
     }
+    const fetchCampaign = async () => {
+        const campaignId = email.campaignId
+        const emailWithCampaign = await fetchEmailById(emailId)
+        const campaign = emailWithCampaign.campaign
+        setCampaign(campaign)
+        return campaign
+    }
 
-    const campaignId = email.campaignId
-    const emailWithCampaign = await fetchEmailById(emailId)
 
-    const campaign = emailWithCampaign.campaign
+    useEffect(() => {
+        if (session) {
+            fetchEmail()
+            fetchCampaign()
+        }
+
+    }, [session])
 
 
-    const content = email.output
-    console.log("Content", content)
+
+    subject = email.subject;
+    intro = email.intro;
+    body = email.body;
+    cta = email.cta;
+    closing = email.closing;
+    console.log("Subject", subject)
+    console.log("intro", intro)
+    console.log("CTA", cta)
     return (
         <>
             <main className='mx-[17vw] min-h-screen'>
@@ -57,7 +86,8 @@ const ActivityEmailPage = async ({ params }) => {
                             </svg>
                             <div>
                                 <h3>{email.recipentName}</h3>
-                                <span className='text-gray-300 text-sm'>{email.recipentEmail} | {campaign.title}</span>
+                                <span className='text-gray-300 text-sm'>{campaign.title}</span>
+                                {/* <span className='text-gray-300 text-sm'>{email.recipentEmail} | {campaign.title}</span> */}
                             </div>
                         </div>
                         <div className='border-b border-gray-600'></div>
@@ -79,7 +109,10 @@ const ActivityEmailPage = async ({ params }) => {
                                 <p>{intro}</p>
                             )
                             }
-                                <p>{body}</p>
+                            <p>{body}</p>
+                            {isTemplate && (
+                                <p>{cta}</p>
+                            )}
                             {isTemplate && (
                                 <p>{closing}</p>
                             )}
