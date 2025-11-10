@@ -9,9 +9,9 @@ const ActivityEmailPage = ({ params }) => {
 
     const emailId = params.id
     const { data: session, status } = useSession()
-    const [email, setEmail] = useState()
+    const [email, setEmail] = useState("")
     const [emailQuality, setEmailQuality] = useState()
-    const [campaign, setCampaign] = useState()
+    const [campaign, setCampaign] = useState("")
 
     const fetchEmail = async () => {
         const email = await fetchEmailById(emailId)
@@ -29,7 +29,9 @@ const ActivityEmailPage = ({ params }) => {
 
     if (!email) {
         return (
-            <div>Email not found</div>
+            <div className='flex justify-center items-center h-screen'>
+                <div className='h-10 w-10 border-4 border-red-600 border-t-transparent animate-spin rounded-full'></div>
+            </div>
         )
     }
     const fetchCampaign = async () => {
