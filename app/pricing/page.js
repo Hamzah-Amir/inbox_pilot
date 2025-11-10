@@ -2,17 +2,18 @@
 import React from 'react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-
-// export const metadata = {
-//   title: 'Pricing — Inbox Pilot',
-//   description: 'Choose the right plan for your cold email personalization needs. Start with our free plan or upgrade to Pro for advanced features.',
-// }
+import { useRouter } from 'next/navigation'
 
 const PricingPage = () => {
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter()
 
   const templatePay = async () => {
+    if (status === 'unauthenticated') {
+      router.push("/login")
+    }
+
     const a = await fetch("https://api.lemonsqueezy.com/v1/checkouts", {
       method: "POST",
       headers: {
@@ -62,6 +63,9 @@ const PricingPage = () => {
   }
 
   const websitePro = async () => {
+    if (status === 'unauthenticated') {
+      router.push("/login")
+    }
     const a = await fetch("https://api.lemonsqueezy.com/v1/checkouts", {
       method: "POST",
       headers: {
@@ -223,7 +227,7 @@ const PricingPage = () => {
               </li>
             </ul>
 
-            <button onClick={() => websitePro()}  className="block text-center py-3 px-6 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition">
+            <button onClick={() => websitePro()} className="block text-center py-3 px-6 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition">
               Upgrade to Web Personalization
             </button>
           </div>
