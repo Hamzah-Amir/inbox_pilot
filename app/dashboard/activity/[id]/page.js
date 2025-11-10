@@ -111,23 +111,23 @@ const ActivityEmailPage = ({ params }) => {
                         <div className="grid grid-cols-2 gap-4 text-sm text-gray-300">
                             <div>
                                 <p className="font-medium text-white">Personalization Score</p>
-                                <p>{0}</p>
-                                {/* <p>{emailQuality.personalizationScore || '0'}</p> */}
+
+                                <p>{emailQuality.personalizationScore || '0'}</p>
                             </div>
                             <div>
                                 <p className="font-medium text-white">Website Context Score</p>
-                                {/* <p>{emailQuality.websiteContextScore || 0}</p> */}
-                                <p>{0}</p>
+                                <p>{emailQuality.websiteContextScore || 0}</p>
+
                             </div>
                             <div>
                                 <p className="font-medium text-white">Readability Grade (Flesch-Kincaid)</p>
-                                <p>{0}</p>
-                                {/* <p>{emailQuality.readabilityGrade.toFixed(2) || 0}</p> */}
+
+                                <p>{emailQuality.readabilityGrade.toFixed(2) || 0}</p>
                             </div>
                             <div>
                                 <p className="font-medium text-white">Tone Match</p>
-                                {/* <p>{emailQuality.toneMatched ? "Matched" : "Not Matched"}</p> */}
-                                <p>{"Not Matched"}</p>
+                                <p>{emailQuality.toneMatched ? "Matched" : "Not Matched"}</p>
+
                             </div>
                         </div>
                     </div>
