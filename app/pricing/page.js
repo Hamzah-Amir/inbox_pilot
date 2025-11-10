@@ -3,11 +3,20 @@ import React from 'react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 const PricingPage = () => {
 
   const { data: session, status } = useSession();
   const router = useRouter()
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push("/login")
+    }
+
+  }, [session, status])
+
 
   const templatePay = async () => {
     if (status === 'unauthenticated') {
