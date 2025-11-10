@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import rs from 'text-readability';
 import { authOptions } from "@/lib/authOptions";
-import { getCampaign } from "@/actions/useractions";
+import { getCampaign, getUser } from "@/actions/useractions";
 import * as cheerio from 'cheerio'
 import { prisma } from "@/lib/prisma";
 import { parse } from "tldts";
@@ -249,6 +249,16 @@ Write the email now.`
                 toneMatched
             }
         });
+
+        await prisma.user.update({
+            where: {
+                id: session.user.id
+            },
+            data: {
+                emailsGenerated: { increment: 1 }
+            }
+        })
+
         return new Response(JSON.stringify(emailJson), { status: 200 });
 
     } catch (error) {
