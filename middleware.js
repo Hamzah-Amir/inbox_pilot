@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./lib/authOptions";
 
-export function middleware(req) {
+export async function middleware(req) {
+  const session = await getServerSession(authOptions)
   const url = req.nextUrl.clone();
 
   // Allow API routes, Next.js internals, and static files
@@ -14,7 +17,6 @@ export function middleware(req) {
   }
 
   // Blocking un-authenticated users from dashbaord
-  const session = req.cookies.get("next-auth.session-token");
   if (!session && url.pathname.startsWith("/dashboard")) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
