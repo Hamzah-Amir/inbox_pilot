@@ -22,7 +22,9 @@ export default function Home() {
                   <p>Start free Trial</p>
                 </button>
                 <button className=" border rounded-lg p-2 px-6 font-bold bg-neutral-900">
-                  Watch Demo
+                  <video src="/demo.mp4">
+                    Watch Demo
+                  </video>
                 </button>
               </div>
               <div className="seperation border h-0.5 my-6 border-gray-600"></div>
@@ -66,9 +68,9 @@ export default function Home() {
               <article className="bg-[#071021] border border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow">
                 <div className="w-36 h-12 rounded-full bg-linear-to-r from-blue-400 to-cyan-500 flex items-center px-4">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 12H21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M16 6L21 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M16 18L21 18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M3 12H21" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M16 6L21 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M16 18L21 18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
                 <h3 className="text-lg font-medium mt-5">3x Higher Response Rates</h3>
@@ -78,8 +80,8 @@ export default function Home() {
               <article className="bg-[#071021] border border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow">
                 <div className="w-36 h-12 rounded-full bg-linear-to-r from-green-400 to-emerald-500 flex items-center px-4">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="7" width="18" height="12" rx="2" stroke="white" strokeWidth="1.5"/>
-                    <path d="M7 11L12 14L17 11" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <rect x="3" y="7" width="18" height="12" rx="2" stroke="white" strokeWidth="1.5" />
+                    <path d="M7 11L12 14L17 11" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
                 <h3 className="text-lg font-medium mt-5">Perfect Tone &amp; Style</h3>
@@ -89,8 +91,8 @@ export default function Home() {
               <article className="bg-[#071021] border border-gray-800 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow">
                 <div className="w-36 h-12 rounded-full bg-linear-to-r from-orange-400 to-yellow-500 flex items-center px-4">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L12 22" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M5 12H19" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 2L12 22" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M5 12H19" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
                 <h3 className="text-lg font-medium mt-5">Scale Without Limits</h3>
