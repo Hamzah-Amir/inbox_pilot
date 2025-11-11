@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export function middleware(req) {
   const url = req.nextUrl.clone();
-  const session = req.cookies.get("next-auth.session-token");
 
+  // Allow API routes, Next.js internals, and static files
   if (
     url.pathname.startsWith("/api") ||
     url.pathname.startsWith("/_next") ||
@@ -12,10 +13,12 @@ export function middleware(req) {
     return NextResponse.next();
   }
 
-  if (!session && url.pathname.startsWith("/dashboard")) {
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
-  }
+  // Block  page middleware
+  // if (url.pathname.startsWith("/checkout") || url.pathname.startsWith("/pricing")) {
+  //   url.pathname = "/maintenance";
+  //   return NextResponse.rewrite(url);
+  // }
 
+  // Otherwise, allow all other pages
   return NextResponse.next();
 }
