@@ -1,11 +1,7 @@
-'use client'
 import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
 
 export default function Home() {
-
-  const [showVideo, setShowVideo] = useState(false)
-
   return (
     <>
       <main className="bg-linear-to-t  from-[#071021] via-[#0a0f1c] to-[#32265e]">
@@ -26,25 +22,11 @@ export default function Home() {
                 <button className=" border rounded-lg p-2 px-6 font-bold bg-linear-to-l from-[#4854b955] via-[#2a519755] to-[#9c41b3]">
                   <p>Start free Trial</p>
                 </button>
-                <div className="flex flex-col items-center gap-4">
-
-                  <button
-                    onClick={() => setShowVideo(true)}
-                    className="border rounded-lg p-2 px-6 font-bold bg-neutral-900 hover:bg-neutral-800 transition"
-                  >
+                <Link>
+                  <button className=" border rounded-lg p-2 px-6 font-bold bg-neutral-900">
                     Watch Demo
                   </button>
-
-                  {showVideo && (
-                    <video
-                      src="/demo.mp4"
-                      controls
-                      autoPlay
-                      className="rounded-lg w-full max-w-2xl mt-4 border border-neutral-700"
-                    />
-                  )}
-                </div>
-
+                </Link>
               </div>
               <div className="seperation border h-0.5 my-6 border-gray-600"></div>
               <div className="flex">
