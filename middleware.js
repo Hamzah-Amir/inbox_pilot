@@ -1,13 +1,9 @@
 import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./lib/authOptions";
 
-export async function middleware(req) {
-  const session = await getServerSession(authOptions)
+export function middleware(req) {
   const url = req.nextUrl.clone();
+  const session = req.cookies.get("next-auth.session-token");
 
-  // Allow API routes, Next.js internals, and static files
   if (
     url.pathname.startsWith("/api") ||
     url.pathname.startsWith("/_next") ||
@@ -16,13 +12,10 @@ export async function middleware(req) {
     return NextResponse.next();
   }
 
-  // Blocking un-authenticated users from dashbaord
   if (!session && url.pathname.startsWith("/dashboard")) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-
-  // Otherwise, allow all other pages
   return NextResponse.next();
 }
