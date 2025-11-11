@@ -168,7 +168,7 @@ Write the email now.`
                 body: emailJson.body || "",
                 cta: emailJson.cta || '',
                 closing: emailJson.closing || "",
-                tone: tone || ''
+                Tone: tone || ''
             }
         });
 
