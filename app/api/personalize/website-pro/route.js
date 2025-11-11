@@ -30,6 +30,7 @@ export async function POST(req) {
         const recipientRole = body.recipientRole;
         const yourName = body.yourName;
         const emailType = body.emailType;
+        const tone = body.tone
 
         if (!domain) {
             return new Response(JSON.stringify({ error: "Domain required" }), { status: 400 });
@@ -73,8 +74,7 @@ export async function POST(req) {
             .join(" ");
 
 
-        pageText = pageText.slice(0, 1200); // Limiting content to 1.2k characters
-        console.log(pageText)
+        pageText = pageText.slice(0, 1500); // Limiting content to 1.5k characters
 
         const email = await prisma.email.create({
             data: {
@@ -109,8 +109,6 @@ export async function POST(req) {
 - Subheadline / Supporting Message: ${subHeadline || "Not found"}
 - Core Value Proposition: ${valueProps || "Not found"}
 - Primary Call-to-Action or Offer: ${cta || "Not found"}
-
-### Fallback (Use ONLY if the above does not contain meaningful strategic insight)
 - General Page Text: ${pageText || "Not found"}
 
 ### Outreach Details
@@ -119,7 +117,7 @@ export async function POST(req) {
 - Sender Name: ${yourName}
 - Campaign Focus / Goal: ${campaign.goal}
 - Email Type: ${emailType}
-- Tone: concise, direct, professional. No hype language. No “hope you're doing well.” No emojis.
+- Tone: ${tone}. No “hope you're doing well.” No emojis.
 
 ### Requirements
 1. The opening sentence must directly reference a meaningful part of the company's positioning or messaging (headline, wording tone, or strategic theme).
@@ -169,7 +167,8 @@ Write the email now.`
                 intro: emailJson.intro || "",
                 body: emailJson.body || "",
                 cta: emailJson.cta || '',
-                closing: emailJson.closing || ""
+                closing: emailJson.closing || "",
+                tone: tone || ''
             }
         });
 
@@ -179,8 +178,6 @@ Write the email now.`
             emailJson.cta || "",
             emailJson.closing || ""
         ].join(" ").replace(/\s+/g, " ").trim();
-
-
 
         function countOccurrences(text, term) {
             if (!text || !term) return 0;
