@@ -30,7 +30,6 @@ const WebsiteProPersonalization = () => {
       router.push("/login")
     }
   }, [status])
-  
 
   const getCampaignData = async () => {
     const campaignData = await getCampaign(session.user.id)
