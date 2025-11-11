@@ -23,7 +23,7 @@ export default function Home() {
                 <button className=" border rounded-lg p-2 px-6 font-bold bg-linear-to-l from-[#4854b955] via-[#2a519755] to-[#9c41b3]">
                   <p>Start free Trial</p>
                 </button>
-                <Link>
+                <Link href='/demo'>
                   <button className=" border rounded-lg p-2 px-6 font-bold bg-neutral-900">
                     Watch Demo
                   </button>
