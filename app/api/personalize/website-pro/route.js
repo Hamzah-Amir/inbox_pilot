@@ -123,7 +123,7 @@ export async function POST(req) {
 1. The opening sentence must directly reference a meaningful part of the company's positioning or messaging (headline, wording tone, or strategic theme).
 2. Avoid flattery, hype, or filler phrases (e.g., “amazing work”, “innovative solution”, “saw you're doing great things”).
 3. Write in a confident, friendly, adult tone. No corporate fluff. No emojis.
-4. Keep the full email between **50 and 90 words**.
+4. Keep the full email between **90 and 120 words**.
 5. Show a clear angle of relevance to their work (e.g., efficiency, product velocity, workflow clarity, collaboration speed).
 6. End with **one simple question** about interest in continuing the conversation.
 7. Do NOT mention: scraping, websites, browsing, AI, algorithms, personalization processes, or data extraction.
