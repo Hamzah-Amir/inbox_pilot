@@ -26,7 +26,7 @@ const WebsiteProPersonalization = () => {
   const [loading, setloading] = useState(false)
 
   useEffect(() => {
-    if(status === 'unauthenticated') {
+    if (status === 'unauthenticated') {
       router.push("/login")
     }
   }, [status])
@@ -67,7 +67,8 @@ const WebsiteProPersonalization = () => {
           recipientRole: data.recipientRole,
           yourName: data.yourName,
           emailType: data.emailType,
-          description: data.instructions
+          description: data.instructions,
+          tone: data.tone
         })
       })
 
@@ -171,7 +172,20 @@ const WebsiteProPersonalization = () => {
               </select>
               {errors.emailType && <p className="text-red-500 text-sm">Your name is required</p>}
             </div>
-
+            <div>
+              <label htmlFor='tone' className='block mb-2'>Select Tone <span className='text-red-500'>*</span></label>
+              <select className='border w-full mb-6 rounded-lg p-2 h-11 placeholder:text-[#8b99ad] focus:border-[#22D3EE] outline-none'
+                id='tone'
+                {...register("tone", { required: true })}
+              >
+                <option value="Professional & Witty">Inbox Pilot's default</option>\
+                <option value="Professional">Professional</option>
+                <option value="Persuasive">Persuasive</option>
+                <option value="Friendly">Friendly</option>
+                <option value="Confident">Confident</option>
+                <option value="Data-Driven">Data-Driven</option>
+              </select>
+            </div>
             {/* Custom Instructions */}
             <div>
               <label className="block mb-1 font-medium">Extra Instructions (Optional)</label>
