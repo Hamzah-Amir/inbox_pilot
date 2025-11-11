@@ -14,14 +14,6 @@ const Footer = () => {
         <div className="flex items-center gap-4">
           <a className="text-cyan-400 hover:underline" href="mailto:hello@inboxpilot.com">support@inboxpilot.pro</a>
           <Link href="/blog">Blog</Link>
-          <iframe
-            style={{ border: "none" }}
-            src="https://cards.producthunt.com/cards/products/1125671"
-            width="500"
-            height="405"
-            allowFullScreen
-          />
-
         </div>
       </div>
     </footer>
