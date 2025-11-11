@@ -87,7 +87,7 @@ const PricingPage = () => {
           "type": "checkouts",
           "attributes": {
             "product_options": {
-              "enabled_variants": [1084451]
+              "enabled_variants": [689521]
             },
             "checkout_options": {
               "button_color": "#7047EB"
@@ -108,7 +108,7 @@ const PricingPage = () => {
             "variant": {
               "data": {
                 "type": "variants",
-                "id": "1084451"
+                "id": "689521"
 
               }
             }
