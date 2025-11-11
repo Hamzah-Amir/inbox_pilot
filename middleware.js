@@ -19,6 +19,13 @@ export function middleware(req) {
     return NextResponse.rewrite(url);
   }
 
+  const session = req.cookies.get("next-auth.session-token");
+  if (!session && url.pathname.startsWith("/dashboard")) {
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+
   // Otherwise, allow all other pages
   return NextResponse.next();
 }
