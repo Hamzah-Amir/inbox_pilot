@@ -13,12 +13,7 @@ export function middleware(req) {
     return NextResponse.next();
   }
 
-  // Block payment page
-  if (url.pathname.startsWith("/checkout") || url.pathname.startsWith("/pricing")) {
-    url.pathname = "/maintenance";
-    return NextResponse.rewrite(url);
-  }
-
+  // Blocking un-authenticated users from dashbaord
   const session = req.cookies.get("next-auth.session-token");
   if (!session && url.pathname.startsWith("/dashboard")) {
     url.pathname = "/login";
