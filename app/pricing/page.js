@@ -80,14 +80,14 @@ const PricingPage = () => {
       headers: {
         'Accept': 'application/vnd.api+json',
         'Content-Type': 'application/vnd.api+json',
-        'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI4NWNlZDQ3ZGMxN2M1MmQ0ZTY4Yzk2OWZjOTE4MDI5MTBiMjkxMzIwMjkxYjM5YTExMDI5ZmY2MWFmMWM5MzI1Y2ExOGJmNGY4MzllODQzZSIsImlhdCI6MTc2MjAwNDMxNS45ODI3OCwibmJmIjoxNzYyMDA0MzE1Ljk4Mjc4MywiZXhwIjoyMDc3NTM3MTE1Ljk2NzUwNSwic3ViIjoiNTg4MDQ0NiIsInNjb3BlcyI6W119.29j5YTt8Altbg7vQMTouq8BTtOd2T95aCQGLnrKQHsF5KsPUHPF7HwigU9kyd4tcHH4s5iU7QjGiaxbtyi5FoXlcMLTqmYgdRW1akVF0HPpOEHnWXbKZa4J48QIcysn3WSEi3MqPQpGVz-WvxMBFbtPDa0OXG6aSSqoj8Y___TRL9DemclC9c6GC4h3ri2fTUzeje3aRMUDMXUeUGyfWpxB_VINXfqZ2o_KUFO9PhBK7YpTBTIpS2vgoGjzgtiDCLs35srX6zDvn3ju1OUFCA0JsVeElzMLbWiBdi11y8VlJ6pFEA6dwDroiNhxJDiqpqRREO70EIn38jjhcNkAQBX6VDIMfIDYW-33Qc0WcKOYCbDClri8V71ZzvyEai8ce7HWdenVD-LAu0KVa1ArjHXleUjCwUfYU1-OBs99dZsmBeuYvkaHbTH3vo2HmDBCOUh67kFNrVqU_16oBB3fwsZpe-DwfxO4LwOH4pdF-Tyzqubej06iZvgURi-nuiAzVYKP66wgloiP4wFvKXfFfauEPVV9_YYf3lGPrzZIcD7-GbZsW0J3af6xXhXU6YstX3WEfI7naupnAUsghPqoDzH1UdKsgOG8hwURqpn_TI0HWa3Wz5-gAi5Mu0DfE0Ny2VVC5cTBV4YICmcCz7066rbq2UqUBkzhby3vFBio8PXs`,
+        'Authorization': `Bearer ${process.env.LEMON_SQUEEZY_KEY}`,
       },
       body: JSON.stringify({
         "data": {
           "type": "checkouts",
           "attributes": {
             "product_options": {
-              "enabled_variants": [689521]
+              "enabled_variants": [1084451]
             },
             "checkout_options": {
               "button_color": "#7047EB"
@@ -108,7 +108,7 @@ const PricingPage = () => {
             "variant": {
               "data": {
                 "type": "variants",
-                "id": "689521"
+                "id": "1084451"
 
               }
             }
