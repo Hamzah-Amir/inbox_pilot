@@ -12,7 +12,7 @@ const Footer = () => {
         <div className="text-sm text-gray-400">© {new Date().getFullYear()} Inbox Pilot. All rights reserved.</div>
 
         <div className="flex items-center gap-4">
-          <a className="text-cyan-400 hover:underline" href="mailto:hello@inboxpilot.com">hello@inboxpilot.com</a>
+          <a className="text-cyan-400 hover:underline" href="mailto:hello@inboxpilot.com">support@inboxpilot.pro</a>
           <Link href="/blog">Blog</Link>
         </div>
       </div>
