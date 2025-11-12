@@ -68,6 +68,15 @@ export async function fetchEmailQuality(id) {
     return emailQuality
 }
 
+export async function FetchSubscription(userId) {
+    const subscription = await prisma.subscription.findUnique({
+        where: {
+            userId: userId
+        }
+    })
+    return subscription
+}
+
 export const fetchRecentEmails = async (session) => {
     const recentEmails = await prisma.email.findMany({
         where: { userId: session.user.id },
