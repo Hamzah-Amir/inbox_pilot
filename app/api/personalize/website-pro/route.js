@@ -102,7 +102,7 @@ export async function POST(req) {
             }
         })
 
-        const prompt = `You are an expert outbound copywriter. You write short, concise, articulate emails that sound human — not AI. You do not guess or invent details. You base every line strictly on the context provided.
+        const prompt = `You are an expert outbound copywriter. You write short, concise, articulate emails that sound human — not AI. You do not guess or invent details. You base every line on the context provided.
 
 ### Context About Recipient & Their Company (from website)
 - Headline / Main Positioning: ${headline || "Not found"}
@@ -120,19 +120,18 @@ export async function POST(req) {
 - Tone: ${tone}. No “hope you're doing well.” No emojis.
 
 ### Requirements
-1. The opening sentence must reference a **specific, meaningful part** of the company's positioning, messaging, or recent activity. Use exact wording from the website if available.
-2. Avoid flattery, hype, or filler phrases (e.g., “amazing work”, “innovative solution”).
-3. Write in a confident, friendly, adult tone — **human, not corporate brochure**.
-4. Keep the **full email (intro + body + cta + closing)** between 90 and 120 words.
-5. Clearly communicate a **tangible benefit or outcome** (e.g., time saved, efficiency gained, revenue/response improvement) that relates to the recipient's work.
-6. End with **one simple, specific question** about continuing the conversation (make it actionable and curiosity-driven).
-7. If headline, subheadline, and valueProps are all “Not found,” write a neutral, relevant opener referencing the company’s industry or focus.
-8. Do NOT mention: scraping, websites, browsing, AI, algorithms, personalization processes, or data extraction.
+1. The opening sentence must directly reference a meaningful part of the company's positioning or messaging (headline, wording tone, or strategic theme).
+2. Avoid flattery, hype, or filler phrases (e.g., “amazing work”, “innovative solution”, “saw you're doing great things”).
+3. Write in a confident, friendly, adult tone. No corporate fluff. No emojis.
+4. “The combined length of intro + body + cta + closing must be between 90-120 words.”
+5. Show a clear angle of relevance to their work (e.g., efficiency, product velocity, workflow clarity, collaboration speed).
+6. End with **one simple question** about interest in continuing the conversation.
+7. Do NOT mention: scraping, websites, browsing, AI, algorithms, personalization processes, or data extraction.
 
 Return a valid JSON object with the following fields:
 
 {
-  "subject": "Keep under 6 words; conversational, not salesy",
+  "subject": "",
   "intro": "",
   "body": "",
   "cta": "",
@@ -141,10 +140,11 @@ Return a valid JSON object with the following fields:
 
 - Do not include Markdown.
 - Do not include quotes outside the JSON.
-- Do not add commentary.
+- Do not include commentary.
 
-Write the email now.`;
+---
 
+Write the email now.`
 
         const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
