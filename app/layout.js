@@ -16,6 +16,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <script>function initApollo(){var n=Math.random().toString(36).substring(7),o=document.createElement("script");
+          o.src="https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache="+n,o.async=!0,o.defer=!0,
+          o.onload=function(){window.trackingFunctions.onLoad({ appId: "69143b8b84756000197bce45" })},
+  document.head.appendChild(o)}initApollo();</script>
         <SessionWrapper>
           <div className="text-white min-h-screen bg-[#071021] pt-18">
             <Navbar />
