@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 // Modles
 model User {
     id   String @id @default(cuid())
@@ -136,7 +135,7 @@ model EmailQuality {
   toneMatched           Boolean
   createdAt   DateTime @default(now())
 
-  email Email @relation(fields: [emailId], references: [id])
+  email Email @relation(fields: [emailId], references: [id], onDelete: Cascade)
 }
 
 model Account {
