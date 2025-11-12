@@ -76,7 +76,7 @@ const ActivityPage = () => {
 
 
     return (
-        <main className='min-h-screen mx-[17.5vw] p-6'>
+        <main className='min-h-screen mx-[16vw] p-6'>
             <Sidebar />
 
             <section className='mt-8'>
