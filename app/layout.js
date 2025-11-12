@@ -2,6 +2,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Script from "next/script";
 import Footer from "@/components/Footer";
 import SessionWrapper from "@/components/SessionWrapper";
 
@@ -16,10 +17,24 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <script>function initApollo(){var n=Math.random().toString(36).substring(7),o=document.createElement("script");
-          o.src="https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache="+n,o.async=!0,o.defer=!0,
-          o.onload=function(){window.trackingFunctions.onLoad({ appId: "69143b8b84756000197bce45" })},
-  document.head.appendChild(o)}initApollo();</script>
+        {/* Apollo Tracking Script */}
+        <Script id="apollo-tracker" strategy="afterInteractive">
+          {`
+            (function initApollo() {
+              var n = Math.random().toString(36).substring(7);
+              var o = document.createElement("script");
+              o.src = "https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache=" + n;
+              o.async = true;
+              o.defer = true;
+              o.onload = function() {
+                window.trackingFunctions.onLoad({
+                  appId: "69143b8b84756000197bce45"
+                });
+              };
+              document.head.appendChild(o);
+            })();
+          `}
+        </Script>
         <SessionWrapper>
           <div className="text-white min-h-screen bg-[#071021] pt-18">
             <Navbar />
