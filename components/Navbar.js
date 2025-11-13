@@ -14,13 +14,16 @@ const Navbar = () => {
   const fetchUser = async () => {
     const user = getUser(session.user.email)
     const emailGenerated = user.emailsGenerated
+    console.log(`${emailGenerated} emails has been generated`)
     setGenerated(emailGenerated)
     return user
   }
 
   useEffect(() => {
     if (!session) return
-    fetchUser()
+    if(session) {
+      fetchUser()
+    }
   }, [session])
 
   if (!session) {
