@@ -14,6 +14,7 @@ const Navbar = () => {
   const fetchUser = async () => {
     const user = getUser(session.user.email)
     const emailGenerated = user.emailsGenerated
+    console.log("User", user)
     console.log(`${emailGenerated} emails has been generated`)
     setGenerated(emailGenerated)
     return user
