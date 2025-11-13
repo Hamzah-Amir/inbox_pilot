@@ -65,7 +65,7 @@ const page = () => {
 
     return (
         <>
-            <main className='min-h-screen mx-[17.5vw]'>
+            <main className='min-h-screen mx-[16vw]'>
                 <Sidebar />
                 <section >
                     <div>
