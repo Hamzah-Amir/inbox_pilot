@@ -53,9 +53,10 @@ const WebsiteProPersonalization = () => {
     const selectedValue = e.target.value;
     if (selectedValue === "create-campaign") {
       router.push("/dashboard/campaigns/create");
-    } else {
-      setValue("campaignId", selectedValue);
+      return;
     }
+    // Update react-hook-form value for valid campaigns
+    setValue("campaignId", selectedValue, { shouldValidate: true });
   };
 
   const onSubmit = async (data) => {
@@ -108,10 +109,13 @@ const WebsiteProPersonalization = () => {
 
             <div>
               <label htmlFor='campaignId' className='block mb-2'>Select Campaign</label>
-              <select onChange={handleCampaignChange} className='border w-full mb-0.5 rounded-lg p-2 h-11 placeholder:text-[#8b99ad] focus:border-[#22D3EE] outline-none'
+              <select 
+                className='border w-full mb-0.5 rounded-lg p-2 h-11 placeholder:text-[#8b99ad] focus:border-[#22D3EE] outline-none'
                 id='campaignId'
                 {...register("campaignId", { required: true })}
+                onChange={handleCampaignChange}
               >
+                <option value="">Select a campaign...</option>
                 <option value="create-campaign">+ Create Campaign</option>
                 {campaigns && campaigns.map(c => (
                   <option key={c.id} value={c.id}>{c.title} ({c.goal})</option>
