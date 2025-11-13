@@ -144,8 +144,8 @@ const PricingPage = () => {
             </div>
 
             <div className="mb-8">
-              <p className="text-4xl font-bold mb-2">$20<span className="text-lg text-gray-400 font-normal">/month</span></p>
-              <p className="text-cyan-400">50 emails per month</p>
+              <p className="text-4xl font-bold mb-2">$10<span className="text-lg text-gray-400 font-normal">/month</span></p>
+              <p className="text-cyan-400">100 emails per month</p>
             </div>
 
             <ul className="space-y-4 mb-8">
@@ -199,7 +199,7 @@ const PricingPage = () => {
             </div>
 
             <div className="mb-8">
-              <p className="text-4xl font-bold mb-2">$50<span className="text-lg text-gray-400 font-normal">/month</span></p>
+              <p className="text-4xl font-bold mb-2">$20<span className="text-lg text-gray-400 font-normal">/month</span></p>
               <p className="text-cyan-400">200 personalized emails per month</p>
             </div>
 
