@@ -24,7 +24,7 @@ export async function POST(req) {
 
     if (eventType === 'subscription_created') {
       const userId = body.meta.custom_data.user_id
-      const emailLimit = body.data.attributes.product_name === "WEBSITE_PERSONALIZATION" ? 200 : 50;
+      const emailLimit = body.data.attributes.product_name === "WEBSITE_PERSONALIZATION" ? 200 : 100;
 
       
 
