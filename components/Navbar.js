@@ -12,7 +12,7 @@ const Navbar = () => {
   const [generated, setGenerated] = useState(null)
 
   const fetchUser = async () => {
-    const user = getUser(session.user.email)
+    const user = await getUser(session.user.email)
     const emailGenerated = user.emailsGenerated
     console.log("User", user)
     console.log(`${emailGenerated} emails has been generated`)
