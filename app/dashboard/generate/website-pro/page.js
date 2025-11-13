@@ -49,6 +49,15 @@ const WebsiteProPersonalization = () => {
 
   }, [session])
 
+  const handleCampaignChange = (e) => {
+    const selectedValue = e.target.value;
+    if (selectedValue === "create-campaign") {
+      router.push("/dashboard/campaigns/create");
+    } else {
+      setValue("campaignId", selectedValue);
+    }
+  };
+
   const onSubmit = async (data) => {
     console.log(data)
     setloading(true)
@@ -103,6 +112,7 @@ const WebsiteProPersonalization = () => {
                 id='campaignId'
                 {...register("campaignId", { required: true })}
               >
+                <option value="create-campaign">+ Create Campaign</option>
                 {campaigns && campaigns.map(c => (
                   <option key={c.id} value={c.id}>{c.title} ({c.goal})</option>
                 ))}
