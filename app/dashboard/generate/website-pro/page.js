@@ -51,8 +51,9 @@ const WebsiteProPersonalization = () => {
 
   const onSubmit = async (data) => {
     console.log(data)
-    if (data === 'create') {
+    if (data.campaignId === 'create') {
       router.push("/dashboard/campaign/create")
+      return
     }
     setloading(true)
     setGeminiResponse("")
