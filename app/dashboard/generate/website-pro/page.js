@@ -48,21 +48,9 @@ const WebsiteProPersonalization = () => {
     }
 
   }, [session])
-  const handleCampaignChange = (e) => {
-    const value = e.target.value;
-    if (value === 'create') {
-      router.push('/dashboard/campaigns/create');
-      return;
-    }
-    setValue('campaignId', value); // keep react-hook-form synced
-  };
 
   const onSubmit = async (data) => {
     console.log(data)
-    if (data.campaignId === 'create') {
-      router.push("/dashboard/campaign/create")
-      return
-    }
     setloading(true)
     setGeminiResponse("")
     setError("");
@@ -118,7 +106,6 @@ const WebsiteProPersonalization = () => {
                 {campaigns && campaigns.map(c => (
                   <option key={c.id} value={c.id}>{c.title} ({c.goal})</option>
                 ))}
-                <option value="create">➕ Create New Campaign</option>
               </select>
             </div>
 
