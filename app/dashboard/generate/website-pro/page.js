@@ -106,16 +106,14 @@ const WebsiteProPersonalization = () => {
                 {campaigns && campaigns.map(c => (
                   <option key={c.id} value={c.id}>{c.title} ({c.goal})</option>
                 ))}
-              </select>
-              <Link href='/campaigns/create'>
-                <select className='flex items-center justify-center gap-2 w-full mb-0.5 rounded-lg p-2 h-11 placeholder:text-[#8b99ad] focus:border-[#22D3EE] outline-none'>
+                <Link href='/dashboard/campaigns/create'>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-cyan-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <rect x="2" y="6" width="20" height="12" rx="2" ry="2" strokeWidth="1.5" />
                     <path d="M8 10h.01" strokeWidth="1.5" />
                   </svg>
                   Create New Campaign
-                </select>
-              </Link>
+                </Link>
+              </select>
             </div>
 
             {/* Website URL */}
