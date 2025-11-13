@@ -25,6 +25,8 @@ const WebsiteProPersonalization = () => {
     closing: ""
   });
   const [loading, setloading] = useState(false)
+  
+  const { onChange: registerOnChange, ...registerProps } = register("campaignId", { required: true });
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -55,8 +57,8 @@ const WebsiteProPersonalization = () => {
       router.push("/dashboard/campaigns/create");
       return;
     }
-    // Update react-hook-form value for valid campaigns
-    setValue("campaignId", selectedValue, { shouldValidate: true });
+    // Call react-hook-form's onChange handler
+    registerOnChange(e);
   };
 
   const onSubmit = async (data) => {
@@ -112,7 +114,7 @@ const WebsiteProPersonalization = () => {
               <select 
                 className='border w-full mb-0.5 rounded-lg p-2 h-11 placeholder:text-[#8b99ad] focus:border-[#22D3EE] outline-none'
                 id='campaignId'
-                {...register("campaignId", { required: true })}
+                {...registerProps}
                 onChange={handleCampaignChange}
               >
                 <option value="">Select a campaign...</option>
