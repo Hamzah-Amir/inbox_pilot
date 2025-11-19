@@ -28,6 +28,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.65.0",
+    "nodemailer": "^6.9.16",
     "text-readability": "^1.1.1",
     "tldts": "^7.0.17",
     "uuid": "^13.0.0"
