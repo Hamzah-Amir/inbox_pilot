@@ -25,8 +25,6 @@ const WebsiteProPersonalization = () => {
     closing: ""
   });
   const [loading, setloading] = useState(false)
-  const [sendingEmail, setSendingEmail] = useState(false)
-  const [sendStatus, setSendStatus] = useState({ success: "", error: "" })
   
   const { onChange: registerOnChange, ...registerProps } = register("campaignId", { required: true });
   const recipientEmail = watch("recipientEmail")
@@ -65,46 +63,6 @@ const WebsiteProPersonalization = () => {
     // Call react-hook-form's onChange handler
     registerOnChange(e);
   };
-
-  const handleSendEmail = async () => {
-    setSendStatus({ success: "", error: "" })
-
-    if (!geminiResponse?.subject) {
-      setSendStatus({ success: "", error: "Generate an email before sending." })
-      return;
-    }
-
-    if (!recipientEmail) {
-      setSendStatus({ success: "", error: "Recipient email is required to send." })
-      return;
-    }
-
-    setSendingEmail(true)
-    try {
-      const bodySections = [geminiResponse.intro, geminiResponse.body, geminiResponse.cta, geminiResponse.closing].filter(Boolean).join("\n\n")
-      const response = await fetch("/api/email/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          to: recipientEmail,
-          subject: geminiResponse.subject,
-          body: `Hi ${recipientName || "there"},\n\n${bodySections}\n\nBest,\n${yourName || "Inbox Pilot User"}`
-        })
-      })
-
-      if (!response.ok) {
-        const errorJson = await response.json().catch(() => ({}))
-        throw new Error(errorJson.error || "Unable to send email via Gmail.")
-      }
-      setSendStatus({ success: "Email sent successfully via Gmail!", error: "" })
-    } catch (err) {
-      setSendStatus({ success: "", error: err.message || "Failed to send email." })
-    } finally {
-      setSendingEmail(false)
-    }
-  }
 
   const onSubmit = async (data) => {
     console.log(data)
@@ -301,22 +259,6 @@ const WebsiteProPersonalization = () => {
                 <p>{geminiResponse.closing}</p>
               </div>
             )}
-          </div>
-          <div className='w-full'>
-            {sendStatus.error && (
-              <p className='text-red-400 text-sm mt-2'>{sendStatus.error}</p>
-            )}
-            {sendStatus.success && (
-              <p className='text-green-400 text-sm mt-2'>{sendStatus.success}</p>
-            )}
-            <button
-              type='button'
-              onClick={handleSendEmail}
-              disabled={sendingEmail || !geminiResponse?.subject}
-              className='w-full bg-cyan-600 mt-4 text-white py-2 rounded hover:bg-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed'
-            >
-              {sendingEmail ? 'Sending via Gmail...' : 'Send Email via Gmail'}
-            </button>
           </div>
         </section>
 
