@@ -151,7 +151,7 @@ Write the email now.`
 
         // Start streaming content
         const result = await model.generateContent(prompt);
-        const text = result.response.text();
+        const text = result.response.text();00
         console.log("Result", text)
 
 

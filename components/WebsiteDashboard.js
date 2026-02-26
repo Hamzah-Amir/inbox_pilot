@@ -5,28 +5,30 @@ import CampaignTable from './CampaignTable'
 const WebsiteDashboard = ( { used, max, plan, campaign, emailsGenerated, email, emailData } ) => {
     return (
         <>
-            <main className='min-h-screen'>
-                <section className='campaigns mx-[15vw] mb-28 min-h-[45vh]'>
-                    <div className=' '>
-                        <h1 className='text-3xl font-bold mt-8'>Your campaigns</h1>
-                        <span className='text-[16px] text-gray-400'>Manage and track your AI-powered email campaigns</span>
+            <main className='min-h-screen ml-0 md:ml-[17.5vw] px-4 md:px-0'>
+                <section className='campaigns mx-auto md:mx-[15vw] mb-28 min-h-[45vh] max-w-7xl'>
+                    <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
+                        <div>
+                            <h1 className='text-2xl md:text-3xl font-bold mt-8 animate-fade-in'>Your campaigns</h1>
+                            <span className='text-sm md:text-[16px] text-gray-400'>Manage and track your AI-powered email campaigns</span>
+                        </div>
                         {
                             used < max ? (
-                                <Link href='/dashboard/generate/website-pro'>
-                                    <button className='bg-blue-600 bottom-16 left-56 relative hover:bg-blue-700 text-white px-4 py-2 rounded-md float-right mt-8 mr-4'>
+                                <Link href='/dashboard/generate/website-pro' className='mt-4 md:mt-8'>
+                                    <button className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all hover:scale-105 animate-fade-in-up'>
                                         Generate New Email
                                     </button>
                                 </Link>
                             ) : (
-                                <Link href='/pricing'>
-                                    <button className='bg-blue-600 bottom-16 left-56 relative hover:bg-blue-700 text-white px-4 py-2 rounded-md float-right mt-8 mr-4'>
+                                <Link href='/pricing' className='mt-4 md:mt-8'>
+                                    <button className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all hover:scale-105 animate-fade-in-up'>
                                         Upgrade your plan
                                     </button>
                                 </Link>
                             )}
                     </div>
                     {/* Plan & Usage bar */}
-                    <div className='w-[80vw] my-6'>
+                    <div className='w-full md:w-[80vw] my-6'>
                         {(() => {
                             const pct = Math.min(100, Math.round((used / max) * 100))
                             return (
@@ -50,18 +52,18 @@ const WebsiteDashboard = ( { used, max, plan, campaign, emailsGenerated, email, 
                             )
                         })()}
                     </div>
-                    <div className='border-[0.5px] border-gray-500 my-6 w-[80vw] rounded-2xl'>
+                    <div className='border-[0.5px] border-gray-500 my-6 w-full md:w-[80vw] rounded-2xl overflow-x-auto'>
                         <CampaignTable campaigns={campaign} emailGenerated={emailsGenerated} />
                     </div>
                 </section>
-                <section className='mx-[15vw] flex gap-8 justify-between h-[60vh] w-[80vw] mt-28'>
-                    <div className='border rounded-2xl p-6 w-full h-full bg-gray-900 border-gray-800 flex flex-col'>
-                        <h1 className='text-3xl font-bold'> AI Insights</h1>
-                        <div className='flex items-center justify-center'>
-                            <h1 className='text-5xl text-center mt-[25vh] '> Coming Soon...</h1>
+                <section className='mx-auto md:mx-[15vw] flex flex-col md:flex-row gap-4 md:gap-8 justify-between min-h-[60vh] md:h-[60vh] w-full md:w-[80vw] mt-8 md:mt-28 max-w-7xl'>
+                    <div className='border rounded-2xl p-4 md:p-6 w-full h-full bg-gray-900 border-gray-800 flex flex-col animate-fade-in-up'>
+                        <h1 className='text-2xl md:text-3xl font-bold'> AI Insights</h1>
+                        <div className='flex items-center justify-center flex-1'>
+                            <h1 className='text-3xl md:text-5xl text-center'> Coming Soon...</h1>
                         </div>
                     </div>
-                    <div className='border rounded-2xl p-6 w-full h-full bg-gray-900 border-gray-800'>
+                    <div className='border rounded-2xl p-4 md:p-6 w-full h-full bg-gray-900 border-gray-800 animate-fade-in-up' style={{animationDelay: '0.1s'}}>
                         <h1 className='text-3xl mb-6 font-bold'>
                             Recent Activity
                         </h1>

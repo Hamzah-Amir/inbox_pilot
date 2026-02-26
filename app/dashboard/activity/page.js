@@ -76,32 +76,32 @@ const ActivityPage = () => {
 
 
     return (
-        <main className='min-h-screen mx-[17.5vw] p-6'>
+        <main className='min-h-screen ml-0 md:ml-[17.5vw] p-4 md:p-6 mt-20 md:mt-0'>
             <Sidebar />
 
-            <section className='mt-8'>
-                <div className='flex items-center gap-4'>
-                    <div className='w-12 h-12 rounded-lg bg-cyan-800 flex items-center justify-center text-white'>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <section className='mt-8 max-w-7xl mx-auto'>
+                <div className='flex items-center gap-3 md:gap-4 animate-fade-in'>
+                    <div className='w-10 h-10 md:w-12 md:h-12 rounded-lg bg-cyan-800 flex items-center justify-center text-white'>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                     </div>
                     <div>
-                        <h2 className='text-2xl font-semibold'>Activity</h2>
-                        <p className='text-gray-300 text-sm mt-1'>Your generated emails and campaigns at a glance.</p>
+                        <h2 className='text-xl md:text-2xl font-semibold'>Activity</h2>
+                        <p className='text-gray-300 text-xs md:text-sm mt-1'>Your generated emails and campaigns at a glance.</p>
                     </div>
                 </div>
 
-                <div className='mt-6 flex items-center gap-4'>
+                <div className='mt-6 flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4'>
                     <div className='flex-1'>
                         <input placeholder='Search emails...'
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className='w-full bg-transparent border border-gray-700 rounded-lg p-3 placeholder:text-gray-500 outline-none'
+                            className='w-full bg-transparent border border-gray-700 rounded-lg p-3 placeholder:text-gray-500 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all text-white'
                         />
                     </div>
                     <div>
-                        <select className='bg-transparent border border-gray-700 rounded-lg p-3 px-4 text-sm'
+                        <select className='bg-transparent border border-gray-700 rounded-lg p-3 px-4 text-sm text-white focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all'
                             value={toneFilter}
                             onChange={(e) => setToneFilter(e.target.value)}
                         >
@@ -112,21 +112,20 @@ const ActivityPage = () => {
                         </select>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-4">
-                        {filteredEmails.length === 0 && (
-                            <p className="text-gray-400 text-sm">No emails found.</p>
-                        )}
-
-                    </div>
+                    {filteredEmails.length === 0 && (
+                        <p className="text-gray-400 text-sm md:hidden">No emails found.</p>
+                    )}
                 </div>
 
-                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {filteredEmails.length === 0 && (
+                    <p className="text-gray-400 text-sm mt-4 hidden md:block">No emails found.</p>
+                )}
+
+                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
                     {filteredEmails.map((email) => (
                         <article onClick={() => handleClick(email.id)}
                             key={email.id}
-                            className="cursor-pointer p-5 rounded-xl border border-gray-800
-             bg-[#0E1726] hover:bg-[#142034] transition-all duration-200 
-             shadow hover:shadow-lg flex flex-col gap-3"
+                            className="cursor-pointer p-4 md:p-5 rounded-xl border border-gray-800 bg-[#0E1726] hover:bg-[#142034] transition-all duration-200 shadow hover:shadow-lg hover:scale-105 flex flex-col gap-3 animate-fade-in-up"
                         >
                             {/* Company Name */}
                             <h3 className="text-white text-lg font-semibold line-clamp-1">

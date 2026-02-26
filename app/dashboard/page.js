@@ -112,7 +112,7 @@ const page = () => {
 
   return (
     <div className='flex justify-center items-center h-screen'>
-      <div className='h-10 w-10 border-4 border-red-600 border-t-transparent animate-spin rounded-full'></div>
+      <div className='h-10 w-10 border-4 border-cyan-600 border-t-transparent animate-spin rounded-full'></div>
     </div>
   )
 

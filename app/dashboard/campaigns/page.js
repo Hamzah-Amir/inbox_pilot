@@ -65,35 +65,37 @@ const page = () => {
 
     return (
         <>
-            <main className='min-h-screen mx-[15.5vw]'>
+            <main className='min-h-screen ml-0 md:ml-[15.5vw] px-4 md:px-0 mt-20 md:mt-0'>
                 <Sidebar />
-                <section >
-                    <div>
-                        <h1 className='text-4xl mt-8'>
-                            Manage Campaigns
-                        </h1>
-                        <p className='text-gray-300 mt-2 text-lg'>
-                            Create, track, and optimize your email campaigns
-                        </p>
+                <section className='max-w-7xl mx-auto'>
+                    <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
+                        <div>
+                            <h1 className='text-3xl md:text-4xl mt-8 font-bold animate-fade-in'>
+                                Manage Campaigns
+                            </h1>
+                            <p className='text-gray-300 mt-2 text-base md:text-lg'>
+                                Create, track, and optimize your email campaigns
+                            </p>
+                        </div>
+                        <div className='mt-4 md:mt-0'>
+                            <Link href='/dashboard/campaigns/create'>
+                                <button className='bg-cyan-500 hover:bg-cyan-400 cursor-pointer text-black px-6 md:px-8 p-2 rounded-xl transition-all hover:scale-105 animate-fade-in-up'>
+                                    + New campaign
+                                </button>
+                            </Link>
+                        </div>
                     </div>
-                    <div className='left-[67vw] mt-4 relative'>
-                        <Link href='/dashboard/campaigns/create'>
-                            <button className='bg-cyan-500 cursor-pointer text-black px-8 p-2 rounded-xl'>
-                                + New campaign
-                            </button>
-                        </Link>
-                    </div>
-                    <div className='mt-10 w-[80vw] border border-gray-700 rounded-xl'>
-                        <table className='w-[80vw] text-left'>
+                    <div className='mt-10 w-full md:w-[80vw] border border-gray-700 rounded-xl overflow-x-auto'>
+                        <table className='w-full md:w-[80vw] text-left min-w-[600px]'>
                             <thead>
                                 <tr className="border-b border-gray-700 rounded-md text-gray-400">
-                                    <th className="py-4 px-4">Campaign Name</th>
-                                    <th className="py-4 px-4">Status</th>
-                                    <th className="py-4 px-4">Goal</th>
-                                    <th className="py-4 px-4">Emails Sent</th>
-                                    <th className="py-4 px-4">Start Date</th>
-                                    <th className="py-4 px-4">End Date</th>
-                                    <th className="py-4 px-4">Actions</th>
+                                    <th className="py-4 px-2 md:px-4 text-sm md:text-base">Campaign Name</th>
+                                    <th className="py-4 px-2 md:px-4 text-sm md:text-base">Status</th>
+                                    <th className="py-4 px-2 md:px-4 text-sm md:text-base">Goal</th>
+                                    <th className="py-4 px-2 md:px-4 text-sm md:text-base">Emails Sent</th>
+                                    <th className="py-4 px-2 md:px-4 text-sm md:text-base hidden md:table-cell">Start Date</th>
+                                    <th className="py-4 px-2 md:px-4 text-sm md:text-base hidden lg:table-cell">End Date</th>
+                                    <th className="py-4 px-2 md:px-4 text-sm md:text-base">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -115,11 +117,11 @@ const page = () => {
                                                 {c.status}
                                             </span>
                                         </td>
-                                        <td className="py-3 px-4">{c.goal}</td>
-                                        <td className="py-3 px-4">{c.emailSent}</td>
-                                        <td className="py-3 px-4">{c.startDate.toLocaleDateString()}</td>
-                                        <td className='py-3 px-4'>{c.endDate ? c.endDate.toLocaleDateString() : "Not specified"}</td>
-                                        <td className="py-4 px-4 space-x-2">
+                                        <td className="py-3 px-2 md:px-4 text-sm md:text-base">{c.goal}</td>
+                                        <td className="py-3 px-2 md:px-4 text-sm md:text-base">{c.emailSent}</td>
+                                        <td className="py-3 px-2 md:px-4 text-sm md:text-base hidden md:table-cell">{c.startDate.toLocaleDateString()}</td>
+                                        <td className='py-3 px-2 md:px-4 text-sm md:text-base hidden lg:table-cell'>{c.endDate ? c.endDate.toLocaleDateString() : "Not specified"}</td>
+                                        <td className="py-4 px-2 md:px-4 space-x-1 md:space-x-2">
                                             <button onClick={() => handleEdit(c.id)} className="edit hover:text-cyan-400"><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" viewBox="0 0 20 20" fill="currentColor">
                                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                             </svg></button>

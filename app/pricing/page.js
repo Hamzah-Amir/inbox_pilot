@@ -124,19 +124,19 @@ const PricingPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-[#071021] text-gray-100">
-      <div className="max-w-6xl mx-auto px-6 py-20">
+    <main className="min-h-screen bg-[#071021] text-gray-100 pt-20 md:pt-0">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-20">
         {/* Header */}
-        <header className="text-center mb-16">
-          <h1 className="text-5xl font-bold mb-4 bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent">Simple, Transparent Pricing</h1>
-          <p className="text-xl text-gray-400">Start personalizing your cold emails today</p>
+        <header className="text-center mb-12 md:mb-16 animate-fade-in-down">
+          <h1 className="text-3xl md:text-5xl font-bold mb-4 bg-linear-to-r from-white to-gray-400 bg-clip-text text-transparent">Simple, Transparent Pricing</h1>
+          <p className="text-lg md:text-xl text-gray-400">Start personalizing your cold emails today</p>
         </header>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto mb-12 md:mb-16">
 
           {/* Pro Plan */}
-          <div className="bg-[#0b1724] border-2 border-cyan-600 rounded-2xl p-8 relative">
+          <div className="bg-[#0b1724] border-2 border-cyan-600 rounded-2xl p-6 md:p-8 relative animate-fade-in-up hover:scale-105 transition-transform duration-300">
 
             <div className="mb-8">
               <h2 className="text-2xl font-bold mb-2">Pro Plan</h2>
@@ -181,14 +181,14 @@ const PricingPage = () => {
               </li>
             </ul>
 
-            <button onClick={() => templatePay()} className="block text-center py-3 px-6 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition">
+            <button onClick={() => templatePay()} className="block w-full text-center py-3 px-6 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition-all hover:scale-105">
 
               Upgrade to Pro
             </button>
           </div>
 
           {/* Web Personalization Plan */}
-          <div className="bg-[#0b1724] border-2 border-cyan-600 rounded-2xl p-8 relative">
+          <div className="bg-[#0b1724] border-2 border-cyan-600 rounded-2xl p-6 md:p-8 relative animate-fade-in-up hover:scale-105 transition-transform duration-300" style={{animationDelay: '0.1s'}}>
             <div className="absolute -top-4 left-4">
               <span className="bg-cyan-600 text-white px-3 py-1 rounded-full text-sm">Most Popular</span>
             </div>
@@ -236,7 +236,7 @@ const PricingPage = () => {
               </li>
             </ul>
 
-            <button onClick={() => websitePro()} className="block text-center py-3 px-6 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition">
+            <button onClick={() => websitePro()} className="block w-full text-center py-3 px-6 rounded-lg bg-cyan-600 text-white hover:bg-cyan-700 transition-all hover:scale-105">
               Upgrade to Web Personalization
             </button>
           </div>
@@ -244,10 +244,10 @@ const PricingPage = () => {
 
         {/* FAQ Section */}
         <section className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-semibold mb-8 text-center">Frequently Asked Questions</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold mb-6 md:mb-8 text-center animate-fade-in">Frequently Asked Questions</h2>
 
-          <div className="space-y-6">
-            <div className="bg-[#0b1724] border border-gray-800 rounded-xl p-6">
+          <div className="space-y-4 md:space-y-6">
+            <div className="bg-[#0b1724] border border-gray-800 rounded-xl p-4 md:p-6 animate-fade-in-up hover:border-cyan-600/50 transition-all">
               <h3 className="text-xl font-semibold mb-2">What happens when I reach my email limit?</h3>
               <p className="text-gray-400">You&apos;ll be notified when you&apos;re close to your limit. Free users can upgrade to Pro for more emails, while Pro users can contact support for custom solutions.</p>
             </div>
