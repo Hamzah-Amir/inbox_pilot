@@ -5,7 +5,7 @@ import CampaignTable from './CampaignTable'
 const WebsiteDashboard = ( { used, max, plan, campaign, emailsGenerated, email, emailData } ) => {
     return (
         <>
-            <main className='min-h-screen ml-0 md:ml-[10.5vw] px-4 md:px-0'>
+            <main className='min-h-screen ml-0 md:ml-[13.5vw] px-4 md:px-0'>
                 <section className='campaigns mx-auto md:mx-[3vw] mb-28 min-h-[45vh] max-w-7xl'>
                     <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
                         <div>
@@ -56,7 +56,7 @@ const WebsiteDashboard = ( { used, max, plan, campaign, emailsGenerated, email, 
                         <CampaignTable campaigns={campaign} emailGenerated={emailsGenerated} />
                     </div>
                 </section>
-                <section className='mx-auto md:mx-[15vw] flex flex-col md:flex-row gap-4 md:gap-8 justify-between min-h-[60vh] md:h-[60vh] w-full md:w-[80vw] mt-8 md:mt-28 max-w-7xl'>
+                <section className='mx-auto md:mx-[12vw] flex flex-col md:flex-row gap-4 md:gap-8 justify-between min-h-[60vh] md:h-[60vh] w-full md:w-[80vw] mt-8 md:mt-28 max-w-7xl'>
                     <div className='border rounded-2xl p-4 md:p-6 w-full h-full bg-gray-900 border-gray-800 flex flex-col animate-fade-in-up'>
                         <h1 className='text-2xl md:text-3xl font-bold'> AI Insights</h1>
                         <div className='flex items-center justify-center flex-1'>
