@@ -5,8 +5,8 @@ import CampaignTable from './CampaignTable'
 const WebsiteDashboard = ( { used, max, plan, campaign, emailsGenerated, email, emailData } ) => {
     return (
         <>
-            <main className='min-h-screen ml-0 md:ml-[17.5vw] px-4 md:px-0'>
-                <section className='campaigns mx-auto md:mx-[15vw] mb-28 min-h-[45vh] max-w-7xl'>
+            <main className='min-h-screen ml-0 md:ml-[10.5vw] px-4 md:px-0'>
+                <section className='campaigns mx-auto md:mx-[3vw] mb-28 min-h-[45vh] max-w-7xl'>
                     <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
                         <div>
                             <h1 className='text-2xl md:text-3xl font-bold mt-8 animate-fade-in'>Your campaigns</h1>
