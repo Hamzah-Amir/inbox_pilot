@@ -56,7 +56,7 @@ const WebsiteDashboard = ( { used, max, plan, campaign, emailsGenerated, email, 
                         <CampaignTable campaigns={campaign} emailGenerated={emailsGenerated} />
                     </div>
                 </section>
-                <section className='mx-auto md:mx-[8vw] flex flex-col md:flex-row gap-4 md:gap-8 justify-between min-h-[60vh] md:h-[60vh] w-full md:w-[80vw] mt-8 md:mt-28 max-w-7xl'>
+                <section className='mx-auto md:mx-[4vw] flex flex-col md:flex-row gap-4 md:gap-8 justify-between min-h-[60vh] md:h-[60vh] w-full md:w-[80vw] mt-8 md:mt-28 max-w-7xl'>
                     <div className='border rounded-2xl p-4 md:p-6 w-full h-full bg-gray-900 border-gray-800 flex flex-col animate-fade-in-up'>
                         <h1 className='text-2xl md:text-3xl font-bold'> AI Insights</h1>
                         <div className='flex items-center justify-center flex-1'>
