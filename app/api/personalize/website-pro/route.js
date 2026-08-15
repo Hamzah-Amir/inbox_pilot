@@ -147,7 +147,7 @@ Return a valid JSON object with the following fields:
 Write the email now.`
 
         const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
 
         // Start streaming content
         const result = await model.generateContent(prompt);
